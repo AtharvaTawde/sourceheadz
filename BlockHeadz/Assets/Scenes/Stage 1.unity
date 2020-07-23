@@ -126222,6 +126222,9 @@ MonoBehaviour:
   goblins:
     serializedVersion: 2
     m_Bits: 1024
+  fallens:
+    serializedVersion: 2
+    m_Bits: 0
   healthpotions:
     serializedVersion: 2
     m_Bits: 2048

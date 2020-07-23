@@ -66,11 +66,15 @@ public class LevelLoader : MonoBehaviour {
                 if (scene == 1) {
                     LoadStage2();
                 } else if (scene == 3) {
-                    LoadMainMenu();
+                    GameComplete();
                 }
             }
 
         } else if (scene == 2) {
+            if (Input.GetMouseButtonDown(0) || Input.GetKey(KeyCode.Space)) {
+                LoadMainMenu();
+            }
+        } else if (scene == 4) {
             if (Input.GetMouseButtonDown(0) || Input.GetKey(KeyCode.Space)) {
                 LoadMainMenu();
             }
@@ -101,6 +105,10 @@ public class LevelLoader : MonoBehaviour {
     void SwitchActive() {
         MainMenu.SetActive(true);
         Instrux.SetActive(false);
+    }
+
+    void GameComplete() {
+        StartCoroutine(LoadLevel(4));
     }
     
     IEnumerator LoadLevel(int levelIndex) {
