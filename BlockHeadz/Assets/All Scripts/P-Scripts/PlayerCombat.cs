@@ -100,7 +100,6 @@ public class PlayerCombat : MonoBehaviour
     public void FallDamage() {
         if (!isGrounded) {
             jumpHeight += Time.deltaTime;
-            Debug.Log(jumpHeight);
         }
 
         if (jumpHeight >= minimumHeight && jumpHeight <= minimumHeight + 2) {

@@ -8,6 +8,7 @@ TagManager:
   - Health
   - Key
   - Limit
+  - Sorcerer
   layers:
   - Default
   - TransparentFX
@@ -26,7 +27,7 @@ TagManager:
   - Gateway
   - Gunners
   - Fallens
-  - 
+  - Sorcerer
   - 
   - 
   - 

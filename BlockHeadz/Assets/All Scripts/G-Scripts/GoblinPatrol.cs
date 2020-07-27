@@ -13,7 +13,7 @@ public class GoblinPatrol : MonoBehaviour
     public float viewFinder;
     public float forwardForce;
     private Rigidbody2D rb;
-    private float jumpForce = 1000f;
+    public float jumpForce = 1000f;
 
  
     void Awake() {
