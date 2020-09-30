@@ -14,7 +14,13 @@ public class HealthBar : MonoBehaviour
         GameObject player = GameObject.Find("Player");
         PlayerCombat p = player.GetComponent<PlayerCombat>();
         slider.maxValue = p.maxHealth;
-        slider.value = p.currentHealth;
+
+        if (!player.GetComponent<PlayerCombat>().dead) {
+            slider.value = p.currentHealth;
+        } else { 
+            slider.value = 0;
+        }
+
         fill.color = gradient.Evaluate(slider.normalizedValue);
     }
 }

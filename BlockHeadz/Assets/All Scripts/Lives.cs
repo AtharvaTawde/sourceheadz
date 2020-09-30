@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using TMPro;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class Lives : MonoBehaviour
 {
@@ -8,11 +9,15 @@ public class Lives : MonoBehaviour
     public TextMeshProUGUI healthpots;
     public TextMeshProUGUI teller;
     public TextMeshProUGUI keyMsg;
+    public GameObject healthpotImage;
+    public GameObject keyImage;
 
     private int scene;
 
     void Start() {
         scene = SceneManager.GetActiveScene().buildIndex; 
+        healthpotImage = GameObject.Find("UI/Health Pot Image");
+        keyImage = GameObject.Find("UI/Key Image");
     }
 
     void Update()
@@ -25,19 +30,27 @@ public class Lives : MonoBehaviour
         bool key = p.hasKey;
         bool opened = p.opened;
 
-        if (currentLives > 0) {
-            lives.text = currentLives.ToString();
+        lives.text = currentLives.ToString();
+
+        if (healthPotCount > 1) {
+            healthpots.text = healthPotCount.ToString();
+        } else {
+            healthpots.text = "";
         }
 
         if (healthPotCount > 0) {
-            healthpots.text = "Health Pots Obtained: " + healthPotCount.ToString();
-            teller.text = "Press E to drink (+25 Health). Warning: You cannot increase your maximum health this way.";
+            healthpotImage.SetActive(true);
+            teller.text = "Press E to use.";
         } else {
-            healthpots.text = "";
+            healthpotImage.SetActive(false);
             teller.text = "";
         }
-        
-        Debug.Log(scene);
+
+        if (key) {
+            keyImage.SetActive(true);
+        } else {
+            keyImage.SetActive(false);
+        }
 
         if ((!key || !opened) && scene == 1) {
             keyMsg.text = "All you have to do is find the key. It is that simple.";
@@ -47,6 +60,8 @@ public class Lives : MonoBehaviour
             keyMsg.text = "Will you even get to the key this time?";
         } else if ((!key || !opened) && scene == 8) {
             keyMsg.text = "dsviv gsv FLIP zn R?!";
+        } else if ((!key || !opened) && scene == 10) {
+            keyMsg.text = "Find HIM.";
         } else if (key || opened) {
             keyMsg.text = "You have ACQUIRED the KEY. You must now locate the Gateway.";
         }

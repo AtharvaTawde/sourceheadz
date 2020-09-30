@@ -9,6 +9,8 @@ TagManager:
   - Key
   - Limit
   - Sorcerer
+  - Reset
+  - Gateway
   layers:
   - Default
   - TransparentFX
@@ -28,8 +30,8 @@ TagManager:
   - Gunners
   - Fallens
   - Sorcerer
-  - 
-  - 
+  - Post Processing
+  - Not Touchable
   - 
   - 
   - 

@@ -35,4 +35,13 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Story 3.unity
     guid: fe577f6eadca0e449a5ce6107d57f0c6
+  - enabled: 1
+    path: Assets/Scenes/Shop.unity
+    guid: ae7fa228e016009448288c263bb22bc2
+  - enabled: 1
+    path: Assets/Scenes/Settings.unity
+    guid: 9c2223cc1c6055548b9c3dd08af476dc
+  - enabled: 1
+    path: Assets/Scenes/Statistics.unity
+    guid: 16a976cca33361e4faf6d46adc240c1a
   m_configObjects: {}
