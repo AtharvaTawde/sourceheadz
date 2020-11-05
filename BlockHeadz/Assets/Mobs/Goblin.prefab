@@ -15,6 +15,7 @@ GameObject:
   - component: {fileID: 1375289150089010037}
   - component: {fileID: 1375289150089010036}
   - component: {fileID: 1375289150089009995}
+  - component: {fileID: 4002269532681397092}
   m_Layer: 10
   m_Name: Goblin
   m_TagString: Enemy
@@ -31,7 +32,7 @@ Transform:
   m_GameObject: {fileID: 1375289150089009994}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 34.80345, y: 11.650572, z: 0}
-  m_LocalScale: {x: 19.64196, y: 19.64196, z: 19.64196}
+  m_LocalScale: {x: 10, y: 10, z: 10}
   m_Children:
   - {fileID: 1375289151151123909}
   - {fileID: 1375289152120781260}
@@ -102,13 +103,13 @@ Rigidbody2D:
   m_Simulated: 1
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0
-  m_Mass: 5
+  m_Mass: 1000
   m_LinearDrag: 0
   m_AngularDrag: 0.05
   m_GravityScale: 1
   m_Material: {fileID: 0}
   m_Interpolate: 0
-  m_SleepingMode: 1
+  m_SleepingMode: 0
   m_CollisionDetection: 1
   m_Constraints: 4
 --- !u!61 &1375289150089010038
@@ -120,22 +121,22 @@ BoxCollider2D:
   m_GameObject: {fileID: 1375289150089009994}
   m_Enabled: 1
   m_Density: 1
-  m_Material: {fileID: 6200000, guid: 7559c22e6467e5f4d8dd7024ce81ef01, type: 2}
+  m_Material: {fileID: 0}
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: -0.00012773275, y: -0.00006266311}
+  m_Offset: {x: 0, y: -0.08}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 0.08, y: 0.08}
+    oldSize: {x: 0.32, y: 0.32}
     newSize: {x: 0.08, y: 0.08}
     adaptiveTilingThreshold: 0.5
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 0.03940349, y: 0.080125324}
+  m_Size: {x: 0.08, y: 0.16}
   m_EdgeRadius: 0
 --- !u!114 &1375289150089010037
 MonoBehaviour:
@@ -149,13 +150,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c1598c33db6818541a7d2b7e252e1409, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 3
-  distance: 0
   groundDetection: {fileID: 1375289151151123909}
   blockDetection: {fileID: 1375289152120781260}
   airDetection: {fileID: 1375289150291701710}
-  viewFinder: 0
-  forwardForce: 0
+  jumpForce: 100000
 --- !u!95 &1375289150089010036
 Animator:
   serializedVersion: 3
@@ -189,15 +187,113 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   animator: {fileID: 1375289150089010036}
   maxHealth: 500
-  currentHealth: 0
+  currentHealth: 500
   attackPoint: {fileID: 1375289151959228027}
   attackRange: 0.5
-  attackDamage: 1
   pLayer:
     serializedVersion: 2
     m_Bits: 512
-  Explosion: {fileID: 7460141111605610245, guid: b087ca615b348c14caf31c6137db2d87,
+  goblinMeat: {fileID: 456458913533323630, guid: ef7a86c872ce55148af3f68773343e29,
     type: 3}
+  woodShard: {fileID: 1372526119914632287, guid: 13c72fd076217d044bd136aec994416c,
+    type: 3}
+  eyeBall: {fileID: 456458913533323630, guid: 52666ec8edda0824ea2c65102bfd665f, type: 3}
+--- !u!82 &4002269532681397092
+AudioSource:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1375289150089009994}
+  m_Enabled: 1
+  serializedVersion: 4
+  OutputAudioMixerGroup: {fileID: 0}
+  m_audioClip: {fileID: 0}
+  m_PlayOnAwake: 1
+  m_Volume: 1
+  m_Pitch: 1
+  Loop: 0
+  Mute: 0
+  Spatialize: 0
+  SpatializePostEffects: 0
+  Priority: 128
+  DopplerLevel: 1
+  MinDistance: 1
+  MaxDistance: 500
+  Pan2D: 0
+  rolloffMode: 0
+  BypassEffects: 0
+  BypassListenerEffects: 0
+  BypassReverbZones: 0
+  rolloffCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  panLevelCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  spreadCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  reverbZoneMixCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
 --- !u!1 &1375289150291701709
 GameObject:
   m_ObjectHideFlags: 0
@@ -222,7 +318,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1375289150291701709}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.0456, y: 0.0387, z: 0}
+  m_LocalPosition: {x: -0.06, y: 0.04, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1375289151384096152}
@@ -252,7 +348,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1375289151151123908}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.0372, y: -0.0414, z: 0}
+  m_LocalPosition: {x: -0.0691, y: -0.1598, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1375289151384096152}
@@ -282,7 +378,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1375289151959228026}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.0368, y: 0.0057, z: 0}
+  m_LocalPosition: {x: -0.07, y: -0.08, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1375289151384096152}
@@ -312,7 +408,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1375289152120781251}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.0333, y: 0.0028, z: 0}
+  m_LocalPosition: {x: -0.07, y: -0.08, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1375289151384096152}

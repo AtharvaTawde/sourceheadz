@@ -11,6 +11,12 @@ TagManager:
   - Sorcerer
   - Reset
   - Gateway
+  - Bartie
+  - Crafting Window
+  - Ground
+  - Bounce Pad
+  - Projectile
+  - Item
   layers:
   - Default
   - TransparentFX
@@ -23,7 +29,7 @@ TagManager:
   - Enemies
   - Player
   - Goblins
-  - Potions
+  - Item
   - Key
   - Limit
   - Gateway
@@ -32,9 +38,9 @@ TagManager:
   - Sorcerer
   - Post Processing
   - Not Touchable
-  - 
-  - 
-  - 
+  - Microwave
+  - Archers
+  - Obstacle
   - 
   - 
   - 

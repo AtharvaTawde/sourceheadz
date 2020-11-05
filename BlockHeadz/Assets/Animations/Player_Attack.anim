@@ -22,7 +22,7 @@ AnimationClip:
         time: 0
         value: {x: 0, y: 0.0047, z: 0}
         inSlope: {x: 0, y: 0, z: 0}
-        outSlope: {x: 0, y: 0, z: 0}
+        outSlope: {x: Infinity, y: 0, z: 0}
         tangentMode: 0
         weightedMode: 0
         inWeight: {x: 0.33333334, y: 0.33333334, z: 0.33333334}
@@ -31,6 +31,31 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     path: Accessory Container
+  - curve:
+      serializedVersion: 2
+      m_Curve:
+      - serializedVersion: 3
+        time: 0
+        value: {x: 0, y: 0, z: 0}
+        inSlope: {x: 0, y: 0, z: 0}
+        outSlope: {x: Infinity, y: Infinity, z: Infinity}
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: {x: 0.33333334, y: 0.33333334, z: 0.33333334}
+        outWeight: {x: 0.33333334, y: 0.33333334, z: 0.33333334}
+      - serializedVersion: 3
+        time: 0.083333336
+        value: {x: 0, y: -0.04, z: 0}
+        inSlope: {x: 0, y: 0, z: 0}
+        outSlope: {x: Infinity, y: Infinity, z: Infinity}
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: {x: 0.33333334, y: 0.33333334, z: 0.33333334}
+        outWeight: {x: 0.33333334, y: 0.33333334, z: 0.33333334}
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    path: Armor Container/Sword
   m_ScaleCurves: []
   m_FloatCurves: []
   m_PPtrCurves:
@@ -45,6 +70,26 @@ AnimationClip:
     path: 
     classID: 212
     script: {fileID: 0}
+  - curve:
+    - time: 0
+      value: {fileID: 21300000, guid: 9e729c2a583405942a5bd41e5e4fac77, type: 3}
+    - time: 0.083333336
+      value: {fileID: 21300000, guid: f602da29e5048d746ac821218b2920e6, type: 3}
+    - time: 0.25
+      value: {fileID: 21300000, guid: f602da29e5048d746ac821218b2920e6, type: 3}
+    attribute: m_Sprite
+    path: Armor Container/Chestplate
+    classID: 212
+    script: {fileID: 0}
+  - curve:
+    - time: 0
+      value: {fileID: 21300000, guid: 9d52521b763b28e469e93fc595b3aeaa, type: 3}
+    - time: 0.083333336
+      value: {fileID: 21300000, guid: 59dbcdb600692e744a1422cb8a71bcdf, type: 3}
+    attribute: m_Sprite
+    path: Armor Container/Sword
+    classID: 212
+    script: {fileID: 0}
   m_SampleRate: 60
   m_WrapMode: 0
   m_Bounds:
@@ -53,6 +98,20 @@ AnimationClip:
   m_ClipBindingConstant:
     genericBindings:
     - serializedVersion: 2
+      path: 662556621
+      attribute: 1
+      script: {fileID: 0}
+      typeID: 4
+      customType: 0
+      isPPtrCurve: 0
+    - serializedVersion: 2
+      path: 3070810176
+      attribute: 1
+      script: {fileID: 0}
+      typeID: 4
+      customType: 0
+      isPPtrCurve: 0
+    - serializedVersion: 2
       path: 0
       attribute: 0
       script: {fileID: 0}
@@ -60,16 +119,28 @@ AnimationClip:
       customType: 23
       isPPtrCurve: 1
     - serializedVersion: 2
-      path: 662556621
-      attribute: 1
+      path: 262958604
+      attribute: 0
       script: {fileID: 0}
-      typeID: 4
-      customType: 0
-      isPPtrCurve: 0
+      typeID: 212
+      customType: 23
+      isPPtrCurve: 1
+    - serializedVersion: 2
+      path: 3070810176
+      attribute: 0
+      script: {fileID: 0}
+      typeID: 212
+      customType: 23
+      isPPtrCurve: 1
     pptrCurveMapping:
     - {fileID: 21300000, guid: 822ed7c27f32edc4693e9e5fe0aec612, type: 3}
     - {fileID: 21300000, guid: a8de9cd7cd9b8cb4b92b32b230d2210a, type: 3}
     - {fileID: 21300000, guid: a8de9cd7cd9b8cb4b92b32b230d2210a, type: 3}
+    - {fileID: 21300000, guid: 9e729c2a583405942a5bd41e5e4fac77, type: 3}
+    - {fileID: 21300000, guid: f602da29e5048d746ac821218b2920e6, type: 3}
+    - {fileID: 21300000, guid: f602da29e5048d746ac821218b2920e6, type: 3}
+    - {fileID: 21300000, guid: 9d52521b763b28e469e93fc595b3aeaa, type: 3}
+    - {fileID: 21300000, guid: 59dbcdb600692e744a1422cb8a71bcdf, type: 3}
   m_AnimationClipSettings:
     serializedVersion: 2
     m_AdditiveReferencePoseClip: {fileID: 0}
@@ -98,8 +169,8 @@ AnimationClip:
         time: 0
         value: 0
         inSlope: 0
-        outSlope: 0
-        tangentMode: 136
+        outSlope: Infinity
+        tangentMode: 97
         weightedMode: 0
         inWeight: 0.33333334
         outWeight: 0.33333334
@@ -117,8 +188,8 @@ AnimationClip:
         time: 0
         value: 0.0047
         inSlope: 0
-        outSlope: 0
-        tangentMode: 136
+        outSlope: Infinity
+        tangentMode: 97
         weightedMode: 0
         inWeight: 0.33333334
         outWeight: 0.33333334
@@ -136,8 +207,8 @@ AnimationClip:
         time: 0
         value: 0
         inSlope: 0
-        outSlope: 0
-        tangentMode: 136
+        outSlope: Infinity
+        tangentMode: 97
         weightedMode: 0
         inWeight: 0.33333334
         outWeight: 0.33333334
@@ -146,6 +217,90 @@ AnimationClip:
       m_RotationOrder: 4
     attribute: m_LocalPosition.z
     path: Accessory Container
+    classID: 4
+    script: {fileID: 0}
+  - curve:
+      serializedVersion: 2
+      m_Curve:
+      - serializedVersion: 3
+        time: 0
+        value: 0
+        inSlope: 0
+        outSlope: Infinity
+        tangentMode: 97
+        weightedMode: 0
+        inWeight: 0.33333334
+        outWeight: 0.33333334
+      - serializedVersion: 3
+        time: 0.083333336
+        value: 0
+        inSlope: 0
+        outSlope: Infinity
+        tangentMode: 97
+        weightedMode: 0
+        inWeight: 0.33333334
+        outWeight: 0.33333334
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    attribute: m_LocalPosition.x
+    path: Armor Container/Sword
+    classID: 4
+    script: {fileID: 0}
+  - curve:
+      serializedVersion: 2
+      m_Curve:
+      - serializedVersion: 3
+        time: 0
+        value: 0
+        inSlope: 0
+        outSlope: Infinity
+        tangentMode: 97
+        weightedMode: 0
+        inWeight: 0.33333334
+        outWeight: 0.33333334
+      - serializedVersion: 3
+        time: 0.083333336
+        value: -0.04
+        inSlope: 0
+        outSlope: Infinity
+        tangentMode: 97
+        weightedMode: 0
+        inWeight: 0.33333334
+        outWeight: 0.33333334
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    attribute: m_LocalPosition.y
+    path: Armor Container/Sword
+    classID: 4
+    script: {fileID: 0}
+  - curve:
+      serializedVersion: 2
+      m_Curve:
+      - serializedVersion: 3
+        time: 0
+        value: 0
+        inSlope: 0
+        outSlope: Infinity
+        tangentMode: 97
+        weightedMode: 0
+        inWeight: 0.33333334
+        outWeight: 0.33333334
+      - serializedVersion: 3
+        time: 0.083333336
+        value: 0
+        inSlope: 0
+        outSlope: Infinity
+        tangentMode: 97
+        weightedMode: 0
+        inWeight: 0.33333334
+        outWeight: 0.33333334
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    attribute: m_LocalPosition.z
+    path: Armor Container/Sword
     classID: 4
     script: {fileID: 0}
   m_EulerEditorCurves: []
