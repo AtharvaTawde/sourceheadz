@@ -6,7 +6,6 @@ using UnityEngine.SceneManagement;
 public class PlayerCombat : MonoBehaviour {
 
     #region Public Variables
-
     public Animator animator;
     public Transform attackPoint;
     public Transform bottleDetection;
@@ -18,6 +17,8 @@ public class PlayerCombat : MonoBehaviour {
     public LayerMask enemyLayers;
     public LayerMask fallens;
     public LayerMask archers;
+    public LayerMask revenants;
+    public LayerMask gunflowers;
     public LayerMask keys;
     public int maxHealth = 200;
     public int currentHealth;
@@ -32,7 +33,6 @@ public class PlayerCombat : MonoBehaviour {
     #endregion
     
     #region Serizalized Variables
-
     [SerializeField] LayerMask itemLayer; 
     [SerializeField] Inventory inventory;
     [SerializeField] GameObject itemsParent;
@@ -44,7 +44,6 @@ public class PlayerCombat : MonoBehaviour {
     #endregion
 
     #region Private Variables
-    
     private float hitCooldown; 
     private int scene;
     private bool isGrounded, crouch;
@@ -53,37 +52,39 @@ public class PlayerCombat : MonoBehaviour {
     private float minimumHeight = 2f;
     private float jumpHeight = 0;
     private float damageReduction; 
+    private float randomPitch;
     private string sceneName;
     private Rigidbody2D rb; 
     private CameraShake cameraShake;
     private GameObject[] accessories = new GameObject[8]; 
     private GameObject healthPlusParticleEffect;
-    private GameObject microwave;
     private AudioSource audioSource;
-    private AudioClip hitSound, nightAmbience;
+    private AudioClip hitSound, hurtSound;
+    private bool bounce;
     #endregion
 
     private void OnValidate() {
-        if (itemsParent != null) 
+        if (itemsParent != null) {
             itemSlots = itemsParent.GetComponentsInChildren<ItemSlot>();
+        }
     }
 
     void Start() {
-        if (itemsParent != null)
+        if (itemsParent != null) {
             itemSlots = itemsParent.GetComponentsInChildren<ItemSlot>();
-        
+        }
+
         hitCooldown = 0f;
         audioSource = GetComponent<AudioSource>();
         hitSound = Resources.Load("hit") as AudioClip;
-        nightAmbience = Resources.Load("nightAmbience") as AudioClip;
+        hurtSound = Resources.Load("hurt") as AudioClip;
         currentHealth = maxHealth;
         previousHealth = currentHealth;
         rb = GetComponent<Rigidbody2D>();
         scene = SceneManager.GetActiveScene().buildIndex;
         sceneName = SceneManager.GetActiveScene().name;
         healthPlusParticleEffect = Resources.Load("Plus Particles") as GameObject;
-        microwave = GameObject.Find("Microwave");
-        
+
         for (int i = 0; i < accessories.Length; i++) {
             accessories[i] = GameObject.Find("Player/Accessory Container/Item" + i);
             if (accessories[i].name == PlayerPrefs.GetString("Selected Item")) {
@@ -98,6 +99,7 @@ public class PlayerCombat : MonoBehaviour {
         damageReduction = Inventory.GetComponent<EquipmentSystem>().damageReduction;
         weaponAtkIncrease = Inventory.GetComponent<EquipmentSystem>().weaponDamageIncrease;
         cameraShake = GameObject.Find("Camera Container/Main Camera").GetComponent<CameraShake>(); 
+        randomPitch = Random.Range(.5f, 1f);
         atkdmg = attackDamage + weaponAtkIncrease;    
 
         if (!GetComponent<PlayerMovement>().isPaused) {
@@ -106,9 +108,13 @@ public class PlayerCombat : MonoBehaviour {
 
             FallDamage();
 
-            if (Input.GetKeyDown(KeyCode.E)) {
-                currentHealth += 25; //Replace with DrinkHP();
-            }
+            //if (Input.GetKeyDown(KeyCode.E)) {
+            //    DrinkHP();
+            //}
+
+            //if (Input.GetKeyDown(KeyCode.R)) {
+            //    UseClayIdol();
+            //}   
 
             if (hitCooldown > 0f) {
                 hitCooldown -= Time.deltaTime;
@@ -145,6 +151,16 @@ public class PlayerCombat : MonoBehaviour {
         }
     }
 
+    void UseClayIdol() {
+        for (int i = 0; i < itemSlots.Length; i++) {
+            if (itemSlots[i].Item != null && itemSlots[i].Item.ItemName == "Clay Idol") {
+                itemSlots[i].Amount--;
+                transform.position = new Vector3(-7, 0, 0);
+                break;
+            }
+        }
+    }
+
     public IEnumerator Drinky() {
         for (int j = 0; j < 25; j++) {
             currentHealth += 1;
@@ -155,7 +171,7 @@ public class PlayerCombat : MonoBehaviour {
         }
     }
 
-    IEnumerator HealthPotDrinkParticles() {
+    public IEnumerator HealthPotDrinkParticles() {
         GameObject plusInstance = Instantiate(healthPlusParticleEffect, new Vector3(transform.position.x, transform.position.y + 0.87f - 2f, transform.position.z), transform.rotation);
         yield return new WaitForSeconds(2f);
         Destroy(plusInstance);
@@ -163,10 +179,12 @@ public class PlayerCombat : MonoBehaviour {
     #endregion
 
     public void TakeDamage(int damage) {
+        audioSource.PlayOneShot(hurtSound, randomPitch);
         currentHealth -= Mathf.RoundToInt(damage * (1 - damageReduction));
-        
+
         if (currentHealth <= 0) {
             Instantiate(Explosion, transform.position, transform.rotation);
+            audioSource.PlayOneShot(hitSound, randomPitch);
             PlayerDie();
         }
     }
@@ -178,10 +196,11 @@ public class PlayerCombat : MonoBehaviour {
         Destroy(gameObject, .01f);
     }
 
-    public void FallDamage() {
-        
-        if (!isGrounded) {
+    public void FallDamage() {    
+        if (!isGrounded && !bounce) {
             jumpHeight += Time.deltaTime;
+        } else if (bounce) {
+            jumpHeight = 0f;
         }
 
         if (jumpHeight >= minimumHeight && jumpHeight <= minimumHeight + 2) {
@@ -198,6 +217,8 @@ public class PlayerCombat : MonoBehaviour {
             TakeDamage(Mathf.RoundToInt(jumpHeight * Random.Range(25.1f, 30f)));
             takesMajorDamage = false;
             StartCoroutine(cameraShake.Shake(.30f, 1f));
+
+
         }
 
         if (isGrounded) {jumpHeight = 0;}
@@ -210,43 +231,36 @@ public class PlayerCombat : MonoBehaviour {
 
     public void Attack() {
         animator.SetTrigger("Attack");
-        float random = Random.Range(.5f, 1f);
-        audioSource.PlayOneShot(hitSound, random);
+        audioSource.PlayOneShot(hitSound, randomPitch);
         StartCoroutine(cameraShake.Shake(.15f, .05f));
 
         Collider2D[] hitEnemies = Physics2D.OverlapCircleAll(attackPoint.position, attackRange, enemyLayers);
         Collider2D[] hitGoblins = Physics2D.OverlapCircleAll(attackPoint.position, attackRange, goblins);
         Collider2D[] hitFallens = Physics2D.OverlapCircleAll(attackPoint.position, attackRange, fallens);
         Collider2D[] hitArchers = Physics2D.OverlapCircleAll(attackPoint.position, attackRange, archers);
+        Collider2D[] hitRevenants = Physics2D.OverlapCircleAll(attackPoint.position, attackRange, revenants);
+        Collider2D[] hitGunflowers = Physics2D.OverlapCircleAll(attackPoint.position, attackRange, gunflowers);
         Collider2D[] hitKeys = Physics2D.OverlapCircleAll(keyDetection.position, attackRange, keys);
         Collider2D[] hitItem = Physics2D.OverlapCircleAll(bottleDetection.position, attackRange, itemLayer);  
         
-        foreach(Collider2D enemy in hitEnemies) {
-            enemy.GetComponent<Enemy>().TakeDamage(atkdmg);
-            enemy.GetComponent<Rigidbody2D>().AddForce(new Vector2(250, 500));
+        Collider2D[][] colliders = {hitEnemies, hitGoblins, hitFallens, hitArchers, hitRevenants, hitGunflowers};
+
+        for (int index = 0; index < colliders.Length; index++) {
+            foreach(Collider2D collider in colliders[index]) {
+                collider.GetComponent<TakeDamage>().ReceiveDamage(atkdmg);
+                collider.GetComponent<Rigidbody2D>().AddForce(new Vector2(250, 500));
+            }
         }
-
-        foreach(Collider2D goblin in hitGoblins) {
-            goblin.GetComponent<GoblinEnemy>().TakeDamage(atkdmg);
-            goblin.GetComponent<Rigidbody2D>().AddForce(new Vector2(250, 500));
-        }
-
-        foreach(Collider2D fallen in hitFallens) {
-            fallen.GetComponent<FallenCombat>().TakeDamage(atkdmg);
-            fallen.GetComponent<Rigidbody2D>().AddForce(new Vector2(250, 500));
-        }  
-
-        foreach(Collider2D archer in hitArchers) {
-            archer.GetComponent<ArcherCombat>().TakeDamage(atkdmg);
-            archer.GetComponent<Rigidbody2D>().AddForce(new Vector2(250, 500));
-        }   
 
         foreach(Collider2D key in hitKeys) {
             Destroy(key.gameObject);
             hasKey = true; 
         }
 
-        string[] itemNames = {"Health Pot", "Goblin Meat", "Nyert Meat", "Wood Shard", "Eyeball", "Vest", "Stone"}; 
+        string[] itemNames = {"Health Pot", "Goblin Meat", "Nyert Meat", "Wood Shard", "Eyeball", 
+                              "Stone", "Clay Slab", "Corpuscle", "Clay Idol", "Baton", 
+                              "Diamond", "Gunflower Seed", "Gunflower Node", "Fabric"}; 
+                              
         foreach (Collider2D item in hitItem) {
             Item itemCopy;
             for (int i = 0; i < itemNames.Length; i++) {
@@ -277,6 +291,16 @@ public class PlayerCombat : MonoBehaviour {
         }
     }
 
+    private void OnCollisionEnter2D(Collision2D other) {
+        string n = other.gameObject.name;
+
+        if (n.Contains("Bounce")) {
+            bounce = true;
+        } else if (!n.Contains("Bounce")) {
+            bounce = false;
+        }
+    }
+
     void AssignAccessories() {
         if (sceneName == "Stage 2" && PlayerPrefs.GetString("Item1") != "True")
             PlayerPrefs.SetString("Item1", "True");
@@ -290,10 +314,15 @@ public class PlayerCombat : MonoBehaviour {
         if (sceneName == "GameComplete" && PlayerPrefs.GetString("Item4") != "True") 
             PlayerPrefs.SetString("Item4", "True");
 
-        if (PlayerPrefs.GetInt("Goblins Killed") + PlayerPrefs.GetInt("Zombies Killed") + PlayerPrefs.GetInt("Archers Killed") >= 1000 && PlayerPrefs.GetString("Item5") != "True") 
-            PlayerPrefs.SetString("Item5", "True");
+        if (PlayerPrefs.GetInt("Goblins Killed") + 
+            PlayerPrefs.GetInt("Zombies Killed") + 
+            PlayerPrefs.GetInt("Archers Killed") + 
+            PlayerPrefs.GetInt("Revenants Killed") >= 1000 && PlayerPrefs.GetString("Item5") != "True") {
+                PlayerPrefs.SetString("Item5", "True");
+            }
 
         if (PlayerPrefs.GetString("Visit Bartie") == "True" && PlayerPrefs.GetString("Item7") != "True") 
             PlayerPrefs.SetString("Item7", "True");
     }
+
 }       

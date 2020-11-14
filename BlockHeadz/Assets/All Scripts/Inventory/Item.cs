@@ -10,7 +10,7 @@ public class Item : ScriptableObject {
     public Sprite Icon;
     [Range(1, 999)]
     public int MaximumStacks;
-    int CurrentStacks;
+    private int CurrentStacks;
 
     [TextArea(15, 20)]
     public string ItemDescription; 
@@ -27,11 +27,9 @@ public class Item : ScriptableObject {
         CurrentStacks = MaximumStacks;
     }
 
-    public virtual Item GetCopy() {
-        return this;
-    }    
+    public virtual Item GetCopy() {return this;}    
 
-    public virtual void Destroy() {}
+    public virtual void Destroy() {}              
 
 }
 

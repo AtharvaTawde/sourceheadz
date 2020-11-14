@@ -9,6 +9,7 @@ public class ItemTooltip : MonoBehaviour {
 
     public void ShowTooltip(Item item) {
         ItemNameText.text = item.ItemName;
+        
         gameObject.SetActive(true);
     }
 

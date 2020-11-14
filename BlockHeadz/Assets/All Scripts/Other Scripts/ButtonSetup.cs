@@ -9,11 +9,13 @@ using UnityEngine.SceneManagement;
 public class ButtonSetup : MonoBehaviour {
     
     public AudioSource audioSource;
-    AudioClip hoverSound, clickSound;    
     public TextMeshProUGUI unlockPanelText;
-    GameObject unlockPanel;
-    string sceneName;
-    GameObject[] items = new GameObject[8]; // actual number of items + 1
+    public int hostileMobCount;
+
+    private AudioClip hoverSound, clickSound;    
+    private GameObject unlockPanel;
+    private string sceneName;
+    private GameObject[] items = new GameObject[8]; // actual number of items + 1
 
     private void Start() {
         audioSource = GetComponent<AudioSource>();
@@ -44,13 +46,18 @@ public class ButtonSetup : MonoBehaviour {
     }
 
     public void EnterLockedItem(BaseEventData eventData) {
-
+        
+        hostileMobCount = PlayerPrefs.GetInt("Goblins Killed") + 
+                          PlayerPrefs.GetInt("Zombies Killed") + 
+                          PlayerPrefs.GetInt("Archers Killed") + 
+                          PlayerPrefs.GetInt("Revenants Killed");
+        
         string[] unlockStatements = {"", 
                                      "Beat Stage 1", 
                                      "Beat Stage 2", 
                                      "Beat Stage 3", 
                                      "Beat Stage 4", 
-                                     "Kill " + (1000 - (PlayerPrefs.GetInt("Goblins Killed") + PlayerPrefs.GetInt("Zombies Killed")  + PlayerPrefs.GetInt("Archers Killed"))).ToString() + " More Hostile Mobs", 
+                                     "Kill " + (1000 - hostileMobCount).ToString() + " More Hostile Mobs", 
                                      "Visit The Sage",
                                      "Visit Bartie's Bar"};
 

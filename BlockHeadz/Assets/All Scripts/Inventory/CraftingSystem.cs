@@ -64,6 +64,10 @@ public class CraftingSystem : MonoBehaviour {
         GlassShardRecipe();         // Recipe 5
         HealthPotRecipe();          // Recipe 6 
         StickRecipe();              // Recipe 7
+        PopperRecipe();             // Recipe 8
+        FabricRecipe();             // Recipe 9
+        
+        //VestRecipe();               // Recipe 10 [REDACTED FOR NOW: MAKES NO SENSE]
 
         # region Armor    
         StoneChestplateRecipe();
@@ -119,7 +123,7 @@ public class CraftingSystem : MonoBehaviour {
     }
 
     void ClayIdolRecipe() {
-        SetupCrafting(new string[] {"Diamond", "Health Pot", "Clay Slab", "Corpuscle"}, "Clay Idol", 1);
+        SetupCrafting(new string[] {"Stone", "Health Pot", "Clay Slab", "Corpuscle"}, "Clay Idol", 2);
     }
 
     void GlassShardRecipe() {
@@ -129,30 +133,42 @@ public class CraftingSystem : MonoBehaviour {
     void HealthPotRecipe() {
         SetupCrafting(new string[] {"Corpuscle", "Glass Shard", "", ""}, "Health Pot", 1);
     }
+    
+    void FabricRecipe() {
+        SetupCrafting(new string[] {"Vest", "", "", ""}, "Fabric", 4);
+    }
+    
+    void PopperRecipe() {
+        SetupCrafting(new string[] {"Fabric", "Fabric", "Gunflower Node", "Gunflower Node"}, "Popper", 1);
+    }
+
+    void VestRecipe() {
+        SetupCrafting(new string[] {"Fabric", "Fabric", "Fabric", "Fabric"}, "Vest", 1);
+    }
 
     # region Armor
     void StoneChestplateRecipe() {
-        SetupCrafting(new string[] {"Stone", "Stone", "Stone", "Vest"}, "StoneC", 1);
+        SetupCrafting(new string[] {"Stone", "Stone", "Stone", "Fabric"}, "StoneC", 1);
     }
 
     void StoneLeggingsRecipe() {
-        SetupCrafting(new string[] {"Stone", "Stone", "Vest", "Vest"}, "StoneL", 1);
+        SetupCrafting(new string[] {"Stone", "Stone", "Fabric", "Fabric"}, "StoneL", 1);
     }
 
     void StoneBootsRecipe() {
-        SetupCrafting(new string[] {"Stone", "Vest", "Vest", "Vest"}, "StoneB", 1);
+        SetupCrafting(new string[] {"Stone", "Fabric", "Fabric", "Fabric"}, "StoneB", 1);
     }
 
     void DiamondChestplateRecipe() {
-        SetupCrafting(new string[] {"Diamond", "Diamond", "Diamond", "Vest"}, "DiamondC", 1);
+        SetupCrafting(new string[] {"Diamond", "Diamond", "Diamond", "Fabric"}, "DiamondC", 1);
     }
 
     void DiamondLeggingsRecipe() {
-        SetupCrafting(new string[] {"Diamond", "Diamond", "Vest", "Vest"}, "DiamondL", 1);
+        SetupCrafting(new string[] {"Diamond", "Diamond", "Fabric", "Fabric"}, "DiamondL", 1);
     }
 
     void DiamondBootsRecipe() {
-        SetupCrafting(new string[] {"Diamond", "Vest", "Vest", "Vest"}, "DiamondB", 1);
+        SetupCrafting(new string[] {"Diamond", "Fabric", "Fabric", "Fabric"}, "DiamondB", 1);
     }
     # endregion
     

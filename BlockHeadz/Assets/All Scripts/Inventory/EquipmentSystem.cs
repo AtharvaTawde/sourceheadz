@@ -5,7 +5,7 @@ using UnityEngine;
 public class EquipmentSystem : MonoBehaviour {
  
     public ItemSlot[] equipmentSlots = new ItemSlot[4];
-    private List<string> equipmentNames = new List<string>();
+    public List<string> equipmentNames = new List<string>();
     string chestplateName, leggingsName, bootsName, weaponName;
     private string stoneColor = "#6f6f6f";
     private string variumColor = "#2fa07b";
@@ -59,12 +59,11 @@ public class EquipmentSystem : MonoBehaviour {
     float[] leggingsProtValues = {0.05f, 0.1f, 0.16f, 0.23f, 0.3f};
     float[] bootsProtValues = {0.03f, 0.05f, 0.09f, 0.12f, 0.15f};
     int[] swordAtkValues = {40, 105, 135, 165, 210};
-    
+
     public float damageReduction;
     float chestplateReduction, bootsReduction, leggingsReduction;
 
     public int weaponDamageIncrease;
-    
     
 
     void Unhexify(string hexColor) {

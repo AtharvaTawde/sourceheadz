@@ -10,7 +10,7 @@ public class Restart : MonoBehaviour {
     }
     
     void Update () {
-        if(Input.GetKeyDown(KeyCode.Q) && player != null && !player.GetComponent<PlayerMovement>().isPaused) {
+        if (Input.GetKeyDown(KeyCode.Q) && player != null && !player.GetComponent<PlayerMovement>().isPaused) {
             SceneManager.LoadScene(SceneManager.GetActiveScene().name);
         }
     }

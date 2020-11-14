@@ -15,8 +15,6 @@ MonoBehaviour:
   id: 0ff86c1eee18ae84aafa7b06ea9060ab
   ItemName: Stone
   Icon: {fileID: 21300000, guid: 1a51b969d22004444b4d1e57b12b0d30, type: 3}
-  MaximumStacks: 10
-  CurrentStacks: 10
-  IsEquipment: 0
+  MaximumStacks: 256
   ItemDescription: A stone. A versatile material. From grand palaces to stone laden
     slums, this material is truly the embodiment of the Universe.

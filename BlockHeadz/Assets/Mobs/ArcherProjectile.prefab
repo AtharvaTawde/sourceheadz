@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 8586445886033511239}
   - component: {fileID: -9046265376901146963}
   - component: {fileID: -5933099117965574884}
-  m_Layer: 0
+  m_Layer: 23
   m_Name: ArcherProjectile
   m_TagString: Projectile
   m_Icon: {fileID: 0}
@@ -49,6 +49,7 @@ SpriteRenderer:
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 0
+  m_RayTraceProcedural: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -140,6 +141,6 @@ MonoBehaviour:
   m_GameObject: {fileID: 3591238281270546337}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c360cd49931db46419eb24ea5c07501c, type: 3}
+  m_Script: {fileID: 11500000, guid: 388d755d922a8d74cbc429eafa620d8a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 

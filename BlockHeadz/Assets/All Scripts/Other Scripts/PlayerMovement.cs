@@ -53,10 +53,6 @@ public class PlayerMovement : MonoBehaviour {
             } else if (Input.GetKeyUp(KeyCode.LeftShift)) {
                 sprint = false;
             }
-
-            if (Input.GetKeyDown(KeyCode.R)) { // Teleport back to the beginning. 
-                Reset();
-            }
         }
     }
 
@@ -78,14 +74,5 @@ public class PlayerMovement : MonoBehaviour {
         } else if (!sprint) {
             runSpeed = 62.5f;
         }
-    }
-
-    public void Reset() {
-        transform.position = new Vector3(-7, 0, 0);
-    }    
-
-    private void OnCollisionEnter2D(Collision2D other) {
-        if (other.gameObject.tag == "Reset")
-            Reset();
     }
 }

@@ -29,7 +29,7 @@ public class Inventory : MonoBehaviour, IItemContainer {
             itemSlots[i].OnDropEvent += OnDropEvent;
         }
         itemSlots = inventoryParent.GetComponentsInChildren<ItemSlot>();
-        SetStartingItems(); 
+        SetStartingItems();
     }
 
     private void OnValidate() {
@@ -40,7 +40,7 @@ public class Inventory : MonoBehaviour, IItemContainer {
     private void SetStartingItems() {
         Clear();
         for (int i = 0; i < startingItems.Length; i++) {
-            AddItem(startingItems[i]);
+            AddItem(startingItems[i].GetCopy());
         }
     }
 
@@ -54,8 +54,17 @@ public class Inventory : MonoBehaviour, IItemContainer {
     } 
 
     public bool AddItem(Item item) {
-        for (int i = 0; i < 31; i++) {
-            if (itemSlots[i].Item == null || (itemSlots[i].Item.ItemName == item.ItemName && itemSlots[i].Amount < item.MaximumStacks)) {
+        int maxInventorySlots = 31;
+        for (int i = 0; i < maxInventorySlots; i++) {
+            if (itemSlots[i].CanAddStack(item)) {
+                itemSlots[i].Item = item;
+                itemSlots[i].Amount++;
+                return true;
+            }
+        }
+        
+        for (int i = 0; i < maxInventorySlots; i++) {
+            if (itemSlots[i].Item == null) {
                 itemSlots[i].Item = item;
                 itemSlots[i].Amount++;
                 return true;

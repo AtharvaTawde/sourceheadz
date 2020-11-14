@@ -15,6 +15,8 @@ public class BaseItemSlot : MonoBehaviour, IPointerEnterHandler, IPointerExitHan
     public event Action<BaseItemSlot> OnPointerExitEvent;
     public event Action<BaseItemSlot> OnRightClickEvent;
 
+    protected bool isPointerOver;
+
     protected Color normalColor = Color.white;
     protected Color disabledColor = Color.clear; 
 
@@ -49,7 +51,12 @@ public class BaseItemSlot : MonoBehaviour, IPointerEnterHandler, IPointerExitHan
                 if (amountText.enabled) {
                     amountText.text = _amount.ToString();
                 }
-            }                
+            }  
+ 
+            if (isPointerOver) {
+                OnPointerExit(null);
+                OnPointerEnter(null);
+            }              
         }
     }
 
@@ -64,6 +71,12 @@ public class BaseItemSlot : MonoBehaviour, IPointerEnterHandler, IPointerExitHan
 
         if (amountText == null) {
             amountText = GetComponentInChildren<TextMeshProUGUI>();
+        }
+    }
+
+    protected virtual void OnDisable() {
+        if (isPointerOver) {
+            OnPointerExit(null);
         }
     }
     
@@ -82,10 +95,12 @@ public class BaseItemSlot : MonoBehaviour, IPointerEnterHandler, IPointerExitHan
     }
 
     public void OnPointerEnter(PointerEventData eventData) {
+        isPointerOver = true;
         OnPointerEnterEvent?.Invoke(this);
     }
 
     public void OnPointerExit(PointerEventData eventData) {
+        isPointerOver = false;
         OnPointerExitEvent?.Invoke(this);
     }
 

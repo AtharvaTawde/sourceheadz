@@ -15,5 +15,5 @@ MonoBehaviour:
   id: 0f87e7ed2a4b14c46a18a28a12b76f7b
   ItemName: Diamond Leggings
   Icon: {fileID: 21300000, guid: d0c4c6ec77b76004bbed8283500e5c94, type: 3}
-  MaximumStacks: 0
+  MaximumStacks: 1
   ItemDescription: 

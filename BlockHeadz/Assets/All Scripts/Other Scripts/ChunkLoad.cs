@@ -11,7 +11,7 @@ public class ChunkLoad : MonoBehaviour {
     public float[] maxPointX = new float[7];
     public float playerX; 
     [SerializeField] GameObject[] entities;
-    float renderDistance = 12f;
+    [SerializeField] float renderDistance;
     
     void OnValidate() {
         entities = GameObject.FindGameObjectsWithTag("Enemy");
@@ -23,6 +23,7 @@ public class ChunkLoad : MonoBehaviour {
     }
 
     void Start() {
+        renderDistance = GameObject.Find("Camera Container/Main Camera").GetComponent<Camera>().orthographicSize * 2.5f;
         entities = GameObject.FindGameObjectsWithTag("Enemy");
         for (int i = 0; i < chunks.Length; i++) {
             chunks[i] = GameObject.Find("Map/Chunk " + (i + 1).ToString());

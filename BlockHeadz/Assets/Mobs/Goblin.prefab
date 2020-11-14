@@ -16,6 +16,7 @@ GameObject:
   - component: {fileID: 1375289150089010036}
   - component: {fileID: 1375289150089009995}
   - component: {fileID: 4002269532681397092}
+  - component: {fileID: 345840196547890514}
   m_Layer: 10
   m_Name: Goblin
   m_TagString: Enemy
@@ -56,6 +57,7 @@ SpriteRenderer:
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 0
+  m_RayTraceProcedural: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -294,6 +296,20 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!114 &345840196547890514
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1375289150089009994}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: addd10db9da22aa488a2bc4b6ad331f4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  currentHealth: 0
+  self: 
 --- !u!1 &1375289150291701709
 GameObject:
   m_ObjectHideFlags: 0

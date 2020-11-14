@@ -10,11 +10,12 @@ public class IntraDimensionalPortal : MonoBehaviour {
     private void OnTriggerEnter2D(Collider2D other) {
         
         string tag = other.gameObject.tag;
+        string name = other.gameObject.name;
         string portal;
         bool isEntity;
 
         #region String and Bool Builders
-        if (tag == "Player" || tag == "Enemy") {
+        if (tag == "Player" || tag == "Enemy" || name.Contains("Revenant")) {
             isEntity = true;
         } else {
             isEntity = false;
@@ -28,7 +29,7 @@ public class IntraDimensionalPortal : MonoBehaviour {
             portal = "Nothing";
         }
 
-        Debug.Log("Portal Type: " + portal + " IsEntity: " + isEntity);
+        //Debug.Log("Portal Type: " + portal + " IsEntity: " + isEntity);
         #endregion
 
         if (isEntity && portal == "Source") {

@@ -65,6 +65,7 @@ public class NyertPatrol : MonoBehaviour
             ground = "Nothing";
         }
 
+        Debug.Log("Ground: " + ground );
         #endregion
 
         if (ground == "Nothing" || block == "Player" || block == "Health Pot" || (block == "Enemy" && blockInfo.collider.gameObject != gameObject) || air == "Ground" ) {

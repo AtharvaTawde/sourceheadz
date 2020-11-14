@@ -105,6 +105,7 @@ GameObject:
   - component: {fileID: 2622213039398802610}
   - component: {fileID: 2622213039398802611}
   - component: {fileID: 6655825461530259135}
+  - component: {fileID: 2315600176704818579}
   m_Layer: 8
   m_Name: Nyert
   m_TagString: Enemy
@@ -144,6 +145,7 @@ SpriteRenderer:
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 0
+  m_RayTraceProcedural: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -217,7 +219,7 @@ Rigidbody2D:
   m_Material: {fileID: 0}
   m_Interpolate: 0
   m_SleepingMode: 1
-  m_CollisionDetection: 0
+  m_CollisionDetection: 1
   m_Constraints: 4
 --- !u!61 &2622213039398802610
 BoxCollider2D:
@@ -275,10 +277,22 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   speed: 2
-  distance: 0
-  groundDetection: {fileID: 0}
-  blockDetection: {fileID: 0}
-  airDetection: {fileID: 0}
+  groundDetection: {fileID: 2622213039250217659}
+  blockDetection: {fileID: 2622213038313381236}
+  airDetection: {fileID: 2622213039047433739}
   viewFinder: 0
   forwardForce: 0
   jumpForce: 250
+--- !u!114 &2315600176704818579
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2622213039398802609}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: addd10db9da22aa488a2bc4b6ad331f4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  self: 
