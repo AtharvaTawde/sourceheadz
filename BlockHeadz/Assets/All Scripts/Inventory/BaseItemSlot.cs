@@ -61,7 +61,7 @@ public class BaseItemSlot : MonoBehaviour, IPointerEnterHandler, IPointerExitHan
     }
 
     public virtual bool CanAddStack(Item item, int amount = 1) {
-        return Item != null && Item.ID == item.ID && Amount + amount <= item.MaximumStacks;
+        return Item != null && Item.ItemName == item.ItemName && Amount + amount <= item.MaximumStacks;
     }
 
     protected virtual void OnValidate() {

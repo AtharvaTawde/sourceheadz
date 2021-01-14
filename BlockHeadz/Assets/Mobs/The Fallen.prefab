@@ -9,7 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3637172978443557430}
-  m_Layer: 16
+  m_Layer: 9
   m_Name: Attack Point
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -39,7 +39,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3637172978455950740}
-  m_Layer: 16
+  m_Layer: 9
   m_Name: Ground Detection
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -69,7 +69,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3637172978987443644}
-  m_Layer: 16
+  m_Layer: 9
   m_Name: Block Detection
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -106,7 +106,8 @@ GameObject:
   - component: {fileID: 3637172979230438041}
   - component: {fileID: 3637172979230438040}
   - component: {fileID: 3637172979230438055}
-  m_Layer: 16
+  - component: {fileID: 9059095985047695843}
+  m_Layer: 9
   m_Name: The Fallen
   m_TagString: Enemy
   m_Icon: {fileID: 0}
@@ -186,7 +187,7 @@ MonoBehaviour:
   blood: {fileID: 7460141111605610264, guid: b087ca615b348c14caf31c6137db2d87, type: 3}
   player:
     serializedVersion: 2
-    m_Bits: 512
+    m_Bits: 8388608
   attackPoint: {fileID: 3637172978443557430}
   attackRange: 0.5
 --- !u!212 &3637172979230438042
@@ -208,7 +209,7 @@ SpriteRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: b61aea1649fdb984ca931ae169be6ee9, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -294,3 +295,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   self: 
+--- !u!114 &9059095985047695843
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3637172979230438054}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: df2bf6470c1d38a45bd39158bda1efd9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  mColorSwapTex: {fileID: 0}
+  mSpriteColors: []
+  mSpriteRenderer: {fileID: 0}
+  previousColor: {r: 0, g: 0, b: 0, a: 0}

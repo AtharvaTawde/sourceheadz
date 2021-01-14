@@ -39,8 +39,8 @@ public class Inventory : MonoBehaviour, IItemContainer {
 
     private void SetStartingItems() {
         Clear();
-        for (int i = 0; i < startingItems.Length; i++) {
-            AddItem(startingItems[i].GetCopy());
+        foreach (Item item in startingItems) {
+            AddItem(item);
         }
     }
 

@@ -50,16 +50,18 @@ public class ButtonSetup : MonoBehaviour {
         hostileMobCount = PlayerPrefs.GetInt("Goblins Killed") + 
                           PlayerPrefs.GetInt("Zombies Killed") + 
                           PlayerPrefs.GetInt("Archers Killed") + 
-                          PlayerPrefs.GetInt("Revenants Killed");
+                          PlayerPrefs.GetInt("Revenants Killed") +
+                          PlayerPrefs.GetInt("Firetraps Killed") + 
+                          PlayerPrefs.GetInt("Fallens Killed");
         
         string[] unlockStatements = {"", 
-                                     "Beat Stage 1", 
-                                     "Beat Stage 2", 
-                                     "Beat Stage 3", 
-                                     "Beat Stage 4", 
+                                     "Kill " + (100 - hostileMobCount).ToString() + " More Hostile Mobs", 
+                                     "Kill " + (500 - hostileMobCount).ToString() + " More Hostile Mobs", 
                                      "Kill " + (1000 - hostileMobCount).ToString() + " More Hostile Mobs", 
-                                     "Visit The Sage",
-                                     "Visit Bartie's Bar"};
+                                     "Kill " + (5000 - hostileMobCount).ToString() + " More Hostile Mobs", 
+                                     "Kill " + (10000 - hostileMobCount).ToString() + " More Hostile Mobs", 
+                                     "Activate the Boss Portal",
+                                     "Visit Bartie"};
 
         for (int i = 0; i < items.Length; i++) {
             if (gameObject.name == "Item" + i) { 

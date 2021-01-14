@@ -25,10 +25,10 @@ InputManager:
     m_Name: Vertical
     descriptiveName: 
     descriptiveNegativeName: 
-    negativeButton: 
-    positiveButton: down
-    altNegativeButton: 
-    altPositiveButton: s
+    negativeButton: down
+    positiveButton: 
+    altNegativeButton: s
+    altPositiveButton: 
     gravity: 3
     dead: 0.001
     sensitivity: 3
@@ -92,7 +92,7 @@ InputManager:
     negativeButton: 
     positiveButton: w
     altNegativeButton: 
-    altPositiveButton: up
+    altPositiveButton: 
     gravity: 1000
     dead: 0.001
     sensitivity: 1000
@@ -134,7 +134,7 @@ InputManager:
     axis: 1
     joyNum: 0
   - serializedVersion: 3
-    m_Name: Mouse ScrollWheel
+    m_Name: Scroll
     descriptiveName: 
     descriptiveNegativeName: 
     negativeButton: 

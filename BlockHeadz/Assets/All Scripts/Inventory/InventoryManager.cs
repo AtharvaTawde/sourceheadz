@@ -8,9 +8,12 @@ public class InventoryManager : MonoBehaviour {
     private Inventory inventory;
     private ItemTooltip itemTooltip;
     private Image draggableItem;
+    private BaseItemSlot dragItemSlot;
+
     [SerializeField] int mouseButton;
 
-    private BaseItemSlot dragItemSlot;
+    public bool ableToDropHoverItem = false;    
+    public ItemSlot itemSlotHoverOver;
 
     private void Awake() {
         inventory = GetComponentInChildren<Inventory>();
@@ -27,14 +30,17 @@ public class InventoryManager : MonoBehaviour {
     }
 
     private void ShowTooltip(BaseItemSlot itemSlot) {
+        itemSlotHoverOver = itemSlot as ItemSlot;
         Item item = itemSlot.Item as Item;
         if (item != null) {
             itemTooltip.ShowTooltip(item);
+            ableToDropHoverItem = true;
         }
     }
 
     private void HideTooltip(BaseItemSlot itemSlot) {
         itemTooltip.HideTooltip();
+        ableToDropHoverItem = false;
     }
 
     private void BeginDrag(BaseItemSlot itemSlot) {

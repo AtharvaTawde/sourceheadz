@@ -3,16 +3,17 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class GoblinPatrol : MonoBehaviour {
-    
-    private float speed = 2f;
-    private bool movingLeft = true;
+    // Put NT tag on anything that should not be detected by a Goblin!!!
     [SerializeField] Transform groundDetection;
     [SerializeField] Transform blockDetection;
     [SerializeField] Transform airDetection;
+    [SerializeField] Transform backDetection;
+    
+    private float jumpForce;
+    private float speed = 2f;
+    private bool movingLeft = true;
     private float viewFinder;
-    private float forwardForce;
     private Rigidbody2D rb;
-    [SerializeField] float jumpForce;
     private bool hit = true;
 
     public static readonly float cooldown = 1f;
@@ -21,6 +22,7 @@ public class GoblinPatrol : MonoBehaviour {
     void Start() {
         rb = GetComponent<Rigidbody2D>();
         hitCooldown = 0f;
+        jumpForce = Mathf.Sqrt(2f * Physics2D.gravity.magnitude * rb.gravityScale * 0.5f) * rb.mass;
     }
      
     private void Update() {
@@ -33,10 +35,8 @@ public class GoblinPatrol : MonoBehaviour {
 
         if (movingLeft) {
             viewFinder = .2f;
-            forwardForce = -2f;
         } else {
             viewFinder = -.2f;
-            forwardForce = 2f;
         }
 
         transform.Translate(Vector2.left * speed * Time.deltaTime);
@@ -44,41 +44,79 @@ public class GoblinPatrol : MonoBehaviour {
         RaycastHit2D groundInfo = Physics2D.Raycast(groundDetection.position, Vector2.down, 7f);
         RaycastHit2D blockInfo = Physics2D.Raycast(blockDetection.position, Vector2.left, viewFinder);
         RaycastHit2D airInfo = Physics2D.Raycast(airDetection.position, Vector2.left, viewFinder);
+        RaycastHit2D backInfo = Physics2D.Raycast(backDetection.position, Vector2.right, viewFinder * 7.5f);
 
         #region String Builder
-        string air;
-        string block;
-        string ground;
+        bool NameCheck(RaycastHit2D hit2D, string name) {
+            if (hit2D.collider.gameObject.name.Contains(name)) {
+                return true;
+            } else {
+                return false;
+            }
+        }  
 
-        if (blockInfo.collider) {
-            block = blockInfo.collider.tag;
-        } else {
-            block = "Nothing";
+        bool ColliderCheck(RaycastHit2D hit) {
+            return hit.collider && 
+                   hit.collider.tag != "NT" && 
+                   hit.collider.tag != "Water" && 
+                   !NameCheck(hit, "Gunflower") && 
+                   !NameCheck(hit, "Rock") && 
+                   !NameCheck(hit, "Health Pot") && 
+                   hit.collider.tag != "Item";
         }
 
-        if (airInfo.collider) {
-            air = airInfo.collider.tag;
-        } else {
-            air = "Nothing";
+
+        string Air() {
+            if (ColliderCheck(airInfo)) {
+                return airInfo.collider.tag;
+            } else {
+                return "Nothing";
+            }
         }
 
-        if (groundInfo.collider) {
-            ground = groundInfo.collider.tag;
-        } else {
-            ground = "Nothing";
+        string Block() {
+            if (ColliderCheck(blockInfo)) {
+                return blockInfo.collider.tag;
+            } else {
+                return "Nothing";
+            }
+        }
+
+        string Back() {
+            if (ColliderCheck(backInfo)) {
+                return backInfo.collider.tag;
+            } else {
+                return "Nothing";
+            }
+        }
+
+        string Ground() {
+            if (groundInfo.collider) {
+                return groundInfo.collider.tag;
+            } else {
+                return "Nothing";
+            }
         }
         #endregion
 
-        if (block == "Ground" && air == "Nothing" && ground == "Ground") {
+        if ((Block() == "Ground" || Block() == "Block") && Air() == "Nothing" && (Ground() == "Ground" || Ground() == "Block")) {
             Jump();
         }
         
-        if (air == "Ground" || ground == "Nothing" || block == "Enemy") {
+        if (Air() == "Ground" || Air() == "Block" || Air() == "Enemy" || Ground() == "Nothing" || Block() == "Enemy") {
             FlipEnemy();
         }
         
-        if (block == "Player" && hit) {
-            Hit(38);
+        if (Block() == "Player" && hit && !blockInfo.collider.GetComponent<PlayerMovement>().isDead) {
+            if (gameObject.name.Contains("Sobb")) {
+                Hit(75);
+            } else {
+                Hit(38);
+            }
+        }
+
+        if (Back() == "Player" && !backInfo.collider.GetComponent<PlayerMovement>().isDead) {
+            FlipEnemy();
         }
     }
 
@@ -87,13 +125,13 @@ public class GoblinPatrol : MonoBehaviour {
             transform.eulerAngles = new Vector3(0, 0, 0);
             movingLeft = false;
         } else {
-            transform.eulerAngles = new Vector3(0, -180, 0);
+            transform.eulerAngles = new Vector3(0, 180, 0);
             movingLeft = true;
         }
     }
 
     void Jump() {
-        rb.AddForce(new Vector2(forwardForce, jumpForce));
+        rb.AddForce(transform.up * jumpForce, ForceMode2D.Impulse);
     }
 
     void Hit(int damage) {
@@ -103,13 +141,13 @@ public class GoblinPatrol : MonoBehaviour {
     }
 
     private void OnDrawGizmos() {
-        Vector3 blockEndPoint = blockDetection.position;
+        Vector3 blockEndPoint = backDetection.position;
         if (movingLeft) { 
-            blockEndPoint.x -= viewFinder; 
+            blockEndPoint.x -= (viewFinder * 7.5f); 
         } else if (!movingLeft) {
-            blockEndPoint.x += viewFinder;
+            blockEndPoint.x += (viewFinder * 7.5f);
         }
 
-        Gizmos.DrawLine(blockDetection.position, blockEndPoint); 
+        Gizmos.DrawLine(backDetection.position, blockEndPoint); 
     }
 }

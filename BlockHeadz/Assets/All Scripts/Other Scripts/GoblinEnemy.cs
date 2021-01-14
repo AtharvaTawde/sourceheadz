@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.Text.RegularExpressions;
 
 public class GoblinEnemy : MonoBehaviour {
     public Animator animator;
@@ -9,61 +10,71 @@ public class GoblinEnemy : MonoBehaviour {
     public Transform attackPoint;
     public float attackRange = 0.5f;
     public LayerMask pLayer;
-    GameObject Explosion;
-    CameraShake cameraShake;
-    [SerializeField] GameObject goblinMeat;
-    [SerializeField] GameObject woodShard;
-    [SerializeField] GameObject eyeBall;
-    int meatDropPercentChance = 40;
-    int woodShardPercentChance = 15;
-    int eyeBallPercentChance = 2;
-    AudioSource audioSource;
-    AudioClip hitSound;
+    public float burnTime = 0f;
 
-    private void OnValidate() {
-        audioSource = GetComponent<AudioSource>();
-        hitSound = Resources.Load("hit") as AudioClip;
-        currentHealth = maxHealth;
-        goblinMeat = Resources.Load("Goblin Meat") as GameObject;
-        woodShard = Resources.Load("Wood Shard") as GameObject;
-        eyeBall = Resources.Load("Eyeball") as GameObject;
-        Explosion = Resources.Load("Blood") as GameObject;
-    }
+    [SerializeField] GameObject onFireGraphic;
+    
+    private GameObject Explosion;
+    private CameraShake cameraShake;
+    private float burnCooldown = 0f;
+    private AudioSource audioSource;
+    private AudioClip hitSound;
+    private bool hurt;
+    private Rigidbody2D rb;
+
+    private Dictionary<string, int> drops = new Dictionary<string, int> {
+        {"Goblin Meat", 50},
+        {"Wood Shard", 45}
+    };
+
+    private Dictionary<string, int> burnDrops = new Dictionary<string, int> {
+        {"Cooked Goblin Meat", 50},
+        {"Wood Shard", 45}
+    };
 
     void Start() {
         audioSource = GetComponent<AudioSource>();
+        rb = GetComponent<Rigidbody2D>();
+        burnCooldown = 0f;
         hitSound = Resources.Load("hit") as AudioClip;
         currentHealth = maxHealth;
-        goblinMeat = Resources.Load("Goblin Meat") as GameObject;
-        woodShard = Resources.Load("Wood Shard") as GameObject;
-        eyeBall = Resources.Load("Eyeball") as GameObject;
-        Explosion = Resources.Load("Blood") as GameObject;
+        Explosion = Resources.Load("Blood") as GameObject;    
     }
 
     public void TakeDamage(int damage) {
         currentHealth -= damage;
         int random = Mathf.RoundToInt(Random.Range(0, 100));
-        animator.SetTrigger("Hurt");
+        hurt = true;
         if (currentHealth <= 0) {
             StartCoroutine(Blood());
-            if (gameObject.name.Contains("Goblin") && random < meatDropPercentChance) {
-                Instantiate(goblinMeat, transform.position, transform.rotation);
-            }
-
-            if (gameObject.name.Contains("Goblin") && random < woodShardPercentChance) {
-                Instantiate(woodShard, transform.position, transform.rotation);
-            }
-
-            if (gameObject.name.Contains("Zombi") && random < eyeBallPercentChance) {
-                Instantiate(eyeBall, transform.position, transform.rotation);
-            }
-
             Die();
         }
     }
 
     private void Update() {
         cameraShake = GameObject.Find("Camera Container/Main Camera").GetComponent<CameraShake>();
+        Burn();
+        if (hurt) {
+            StartCoroutine(GetComponent<HitEffect>().HurtEffect());
+            hurt = false;
+        }
+    }
+
+    void Burn() {
+        if (burnTime > 0) {
+            onFireGraphic.SetActive(true);
+            burnTime -= Time.deltaTime;
+
+            if (burnCooldown <= 0) {
+                TakeDamage(10);                
+                burnCooldown = 0.5f;
+            } else {
+                burnCooldown -= Time.deltaTime;
+            }
+        } else {
+            onFireGraphic.SetActive(false);
+            burnTime = 0;
+        }
     }
 
     public IEnumerator Hit(int damage) {
@@ -81,13 +92,8 @@ public class GoblinEnemy : MonoBehaviour {
     }
 
     public void Die() {
-        
-        if (gameObject.name.Contains("Goblin")) {
-            PlayerPrefsHelper.IncrementInt("Goblins Killed");
-        } else if (gameObject.name.Contains("Zombi")) {
-            PlayerPrefsHelper.IncrementInt("Zombies Killed");
-        }
-
+        HelperFunctions.IncrementInt("Goblins Killed");
+        GenerateDrops();
         Destroy(gameObject);
     }
 
@@ -97,12 +103,36 @@ public class GoblinEnemy : MonoBehaviour {
         Destroy(bloodInstance);
     }
 
-}
+    void GenerateDrops() {
+        if (burnTime > 0) {
+            foreach (KeyValuePair<string, int> entry in burnDrops) {
+                int random = Mathf.RoundToInt(Random.Range(0, 100));
 
-public static class PlayerPrefsHelper {
-    
-    public static void IncrementInt(string key) {
-        PlayerPrefs.SetInt(key, PlayerPrefs.GetInt(key) + 1);
+                if (random <= entry.Value) {
+                    Drop(RemoveIntegers(entry.Key), 1);
+                }
+            }
+        } else {
+            foreach (KeyValuePair<string, int> entry in drops) {
+                int random = Mathf.RoundToInt(Random.Range(0, 100));
+
+                if (random <= entry.Value) {
+                    Drop(RemoveIntegers(entry.Key), 1);
+                }
+            }
+        }
+    }
+
+    void Drop(string name, int amount) {
+        for (int i = 0; i < amount; i++) {
+            GameObject drop = Resources.Load("Physical Items/" + name) as GameObject;
+            GameObject dropInstance = Instantiate(drop, transform.position, transform.rotation);
+            dropInstance.name = string.Format("{0}x{1}", name, amount.ToString());
+        }
+    }
+
+    string RemoveIntegers(string input) {
+        return Regex.Replace(input, @"[\d-]", string.Empty);
     }
 
 }

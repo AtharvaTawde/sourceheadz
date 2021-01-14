@@ -11,7 +11,7 @@ public class EquipmentSystem : MonoBehaviour {
     private string variumColor = "#2fa07b";
     private string diamondColor = "#2f90d4";
     private string tungstenCarbideColor = "#a45bb2";
-    private string titaniumColor = "#979f8f";
+    private string titaniumColor = "#f1faea";
     public List<Color> typeColors = new List<Color>();
     
     private string[] chestplateType = {"Stone Chestplate", 
@@ -38,27 +38,17 @@ public class EquipmentSystem : MonoBehaviour {
                                   "Diamond Sword", 
                                   "Varium Sword"};
 
-    private string[] knifeType = {"Stone Knife", 
-                                  "Tungsten Carbide Knife", 
-                                  "Titanium Knife",
-                                  "Diamond Knife", 
-                                  "Varium Knife"};
-
-    private string[] axeType = {"Stone Axe", 
-                                "Tungsten Carbide Axe", 
-                                "Titanium Axe",
-                                "Diamond Axe", 
-                                "Varium Axe"};
-
     public GameObject chestplate;
     public GameObject leggings;
     public GameObject boots;
     public GameObject sword;
 
-    float[] chestplateProtValues = {0.07f, 0.15f, 0.25f, 0.35f, 0.45f};
-    float[] leggingsProtValues = {0.05f, 0.1f, 0.16f, 0.23f, 0.3f};
-    float[] bootsProtValues = {0.03f, 0.05f, 0.09f, 0.12f, 0.15f};
-    int[] swordAtkValues = {40, 105, 135, 165, 210};
+    float[] chestplateProtValues =  {0.12f, 0.18f, 0.27f, 0.36f, 0.45f};
+    float[] leggingsProtValues =    {0.08f, 0.12f, 0.18f, 0.24f, 0.30f};
+    float[] bootsProtValues =       {0.04f, 0.06f, 0.09f, 0.12f, 0.15f};
+    // Protection Values              24%    35%    54%    72%    90%  
+
+    int[] swordAtkValues = {40, 75, 105, 135, 200};
 
     public float damageReduction;
     float chestplateReduction, bootsReduction, leggingsReduction;
@@ -101,57 +91,61 @@ public class EquipmentSystem : MonoBehaviour {
 
     void ChestplateManager() {
         for (int i = 0; i < chestplateType.Length; i++) {
-            if (chestplateName.Contains(chestplateType[i]) && chestplate != null) {
+            if (chestplateName == chestplateType[i]) {
                 chestplate.GetComponent<SpriteRenderer>().color = typeColors[i];
                 chestplateReduction = chestplateProtValues[i];
-            } else if (chestplateName == "" && chestplate != null) {
+            } else if (!chestplateName.Contains("Chestplate")) {
                 chestplate.GetComponent<SpriteRenderer>().color = Color.clear;
                 chestplateReduction = 0f;
             }
         } 
+        SetupSlots();
     }
 
     void LeggingsManager() {
         for (int i = 0; i < leggingsType.Length; i++) {
-            if (leggingsName.Contains(leggingsType[i]) && leggings != null) {
+            if (leggingsName == leggingsType[i]) {
                 leggings.GetComponent<SpriteRenderer>().color = typeColors[i];
                 leggingsReduction = leggingsProtValues[i];
-            } else if (leggingsName == "" && leggings != null) {
+            } else if (!leggingsName.Contains("Leggings")) {
                 leggings.GetComponent<SpriteRenderer>().color = Color.clear;
                 leggingsReduction = 0f;
             }
         }
+        SetupSlots();
     }
 
     void BootsManager() {
         for (int i = 0; i < bootsType.Length; i++) {
-            if (bootsName.Contains(bootsType[i]) && boots != null) {
+            if (bootsName == bootsType[i]) {
                 boots.GetComponent<SpriteRenderer>().color = typeColors[i];
                 bootsReduction = bootsProtValues[i];
-            } else if (bootsName == "" && boots != null) {
+            } else if (!bootsName.Contains("Boots")) {
                 boots.GetComponent<SpriteRenderer>().color = Color.clear;
                 bootsReduction = 0f;
             }
         }
+        SetupSlots();
     }
 
     void SwordManager() {
         for (int i = 0; i < swordType.Length; i++) {
-            if (weaponName.Contains(swordType[i]) && sword != null) {
+            if (weaponName == swordType[i]) {
                 sword.GetComponent<SpriteRenderer>().color = typeColors[i];
                 weaponDamageIncrease = swordAtkValues[i];
-            } else if (weaponName == "" && sword != null) {
+            } else if (!weaponName.Contains("Sword")) {
                 sword.GetComponent<SpriteRenderer>().color = Color.clear;
                 weaponDamageIncrease = 0;
             }
         }
+        SetupSlots();
     }
 
     void SetupSlots() {
-        for (int i = 0; i < equipmentNames.Count; i++) {
+        for (int i = 0; i < 4; i++) {
             if (equipmentSlots[i].Item != null) {
                 equipmentNames[i] = equipmentSlots[i].Item.ItemName;
-            } else {
+            } else if (equipmentSlots[i].Item == null) {
                 equipmentNames[i] = "";
             }                 
         }

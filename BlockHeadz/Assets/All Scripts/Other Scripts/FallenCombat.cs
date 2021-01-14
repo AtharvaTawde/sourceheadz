@@ -12,9 +12,10 @@ public class FallenCombat : MonoBehaviour {
     private int maxHealth = 1000;
     private CameraShake cameraShake;
     private Animator animator;
+    private bool hurt;
 
-    private string[] dropNames = {"Eyeball", "Vest", "Stone", "Wood Shard", "Clay Slab", "Baton", "Clay Idol"};
-    private int[] dropRates = {25, 75, 100, 100, 12, 6, 3};
+    private string[] dropNames = {"Eyeball", "Stone", "Wood Shard", "Clay Slab", "Baton", "Clay Idol"};
+    private int[] dropRates = {25, 100, 100, 12, 6, 3};
     
     void Start() {
         cameraShake = GameObject.Find("Camera Container/Main Camera").GetComponent<CameraShake>();
@@ -22,14 +23,20 @@ public class FallenCombat : MonoBehaviour {
         currentHealth = maxHealth;
     }
 
+    private void Update() {
+        if (hurt)
+            StartCoroutine(GetComponent<HitEffect>().HurtEffect());
+            hurt = false;
+    }
+
     public void TakeDamage(int damage) {
-        animator.SetTrigger("Hurt");
+        hurt = true;
         currentHealth -= damage;
         if (currentHealth <= 0) {
             Die();
         }
     }
-
+    
     public IEnumerator Hit(int damage) {
         animator.SetTrigger("Attack");
         StartCoroutine(cameraShake.Shake(.15f, .05f));
@@ -44,7 +51,7 @@ public class FallenCombat : MonoBehaviour {
 
     public void Die() {
         StartCoroutine(Blood());
-        PlayerPrefsHelper.IncrementInt("Fallens Killed");
+        HelperFunctions.IncrementInt("Fallens Killed");
         GenerateDrops();
         Destroy(gameObject);
     }
@@ -60,15 +67,18 @@ public class FallenCombat : MonoBehaviour {
             int random = Mathf.RoundToInt(Random.Range(0, 100));
 
             if (random <= dropRates[i]) {
-                Drop(dropNames[i]);
+                Drop(dropNames[i], 1);
             }
         }
 
-        Drop("Baton");
+        Drop("Baton", 1);
     }
 
-    void Drop(string name) {
-        GameObject drop = Resources.Load(name) as GameObject;
-        Instantiate(drop, transform.position, transform.rotation);
+    void Drop(string name, int amount) {
+        for (int i = 0; i < amount; i++) {
+            GameObject drop = Resources.Load("Physical Items/" + name) as GameObject;
+            GameObject dropInstance = Instantiate(drop, transform.position, transform.rotation);
+            dropInstance.name = string.Format("{0}x{1}", name, amount.ToString());
+        }
     }
 }

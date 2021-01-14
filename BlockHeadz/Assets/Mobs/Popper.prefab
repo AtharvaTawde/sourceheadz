@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 526844937153719865}
   - component: {fileID: -4983398667015594235}
   - component: {fileID: 4522519721159251563}
-  m_Layer: 22
+  m_Layer: 21
   m_Name: Popper
   m_TagString: Ground
   m_Icon: {fileID: 0}
@@ -148,6 +148,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   detonationPoint: {fileID: 2227652021241667163}
   explodeSound: {fileID: 8300000, guid: be569c76083b7694daede12e53d11549, type: 3}
+  explosion: {fileID: 1888511880633951600, guid: 3943e1555aaca7640be1ddb53507f720, type: 3}
 --- !u!82 &4522519721159251563
 AudioSource:
   m_ObjectHideFlags: 0
@@ -253,7 +254,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2227652021241667163}
-  m_Layer: 22
+  m_Layer: 21
   m_Name: Detonation Point
   m_TagString: Untagged
   m_Icon: {fileID: 0}

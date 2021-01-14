@@ -18,7 +18,6 @@ public class FallenBehavior : MonoBehaviour {
     private bool movingLeft = true;
     private float viewFinder;
     private float speed = 5f;
-    private float knockbackForce;
     #endregion
 
     void Start() {
@@ -36,10 +35,8 @@ public class FallenBehavior : MonoBehaviour {
 
         if (movingLeft) {
             viewFinder = .2f;
-            knockbackForce = -5f;
         } else {
             viewFinder = .2f;
-            knockbackForce = 5f;
         }
 
         transform.Translate(Vector2.left * speed * Time.deltaTime);
@@ -51,7 +48,15 @@ public class FallenBehavior : MonoBehaviour {
         string ground;
         string block;
 
-        if (blockInfo.collider) {
+        bool NameCheck(RaycastHit2D hit2D, string name) {
+            if (hit2D.collider.gameObject.name.Contains(name)) {
+                return true;
+            } else {
+                return false;
+            }
+        }  
+
+        if (blockInfo.collider && blockInfo.collider.tag != "NT" && blockInfo.collider.tag != "Water" && !NameCheck(blockInfo, "Gunflower") && !NameCheck(blockInfo, "Rock")) {
             block = blockInfo.collider.tag;
         } else {
             block = "Nothing";
@@ -64,11 +69,11 @@ public class FallenBehavior : MonoBehaviour {
         }
         #endregion
 
-        if (block == "Ground" || ground == "Nothing") {
+        if (block == "Ground" || block == "Block" || ground == "Nothing" || block == "Enemy") {
             Flip();
         }
 
-        if (block == "Player" && hit) {
+        if (block == "Player" && hit && !blockInfo.collider.GetComponent<PlayerMovement>().isDead) {
             Hit(50);
         }
     }

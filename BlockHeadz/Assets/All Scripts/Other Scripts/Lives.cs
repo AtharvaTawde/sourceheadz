@@ -1,36 +1,53 @@
-﻿using UnityEngine;
+﻿using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
 using TMPro;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class Lives : MonoBehaviour {
     
-    # region Stuff
     public TextMeshProUGUI lives;
-    public TextMeshProUGUI keyMsg;
     public TextMeshProUGUI protLvl;
     public TextMeshProUGUI atkDmg;
     public GameObject protImage;
-    public GameObject keyImage;
+    
     [SerializeField] GameObject inventory;
+    [SerializeField] GameObject eatSlider;
     [SerializeField] float damageReduction;
+    [SerializeField] float consumptionTime;
     [SerializeField] int attackDamage;
-    PlayerCombat playerCombat;
+    
+    private PlayerCombat playerCombat;
+    private ItemSelection itemSelection;
+    private PlayerMovement playerMovement;
     private int scene;
-    # endregion
 
     void Start() {
+       playerMovement = GameObject.Find("Player").GetComponent<PlayerMovement>();
        playerCombat = GameObject.Find("Player").GetComponent<PlayerCombat>();
+       itemSelection = GameObject.Find("Player").GetComponent<ItemSelection>();
     } 
 
     void Update() {
         damageReduction = inventory.GetComponent<EquipmentSystem>().damageReduction;
         attackDamage = playerCombat.atkdmg;
+        consumptionTime = itemSelection.eatTime;
         int currentLives = playerCombat.currentHealth;
         int maxLives = playerCombat.maxHealth;
         
         protLvl.text = Mathf.RoundToInt(damageReduction * 100f).ToString() + "%";
         atkDmg.text = attackDamage.ToString();
+
+        if (consumptionTime <= 0 || consumptionTime == itemSelection.k_eatTime) {
+            eatSlider.GetComponent<CanvasGroup>().alpha = 0f;
+        } else {
+            eatSlider.GetComponent<CanvasGroup>().alpha = 1f;
+        }
+
+        if (playerMovement.isDead || !itemSelection.isFood()) {
+            eatSlider.GetComponent<CanvasGroup>().alpha = 0f;
+        }
 
         if (damageReduction != 0f) {
             protImage.SetActive(true);
@@ -40,23 +57,7 @@ public class Lives : MonoBehaviour {
 
         if (playerCombat != null) {
             lives.text = currentLives.ToString();
-            SetKey();
         }
     }
 
-    void SetKey() {
-        bool key = playerCombat.hasKey;
-        bool opened = playerCombat.opened;
-        if (key) {
-            keyImage.SetActive(true);
-        } else {
-            keyImage.SetActive(false);
-        }
-
-        if ((!key || !opened)) {
-            keyMsg.text = "Find the Key.";
-        } else if (key || opened) {
-            keyMsg.text = "Locate the Gateway.";
-        }
-    }
-}
+}       

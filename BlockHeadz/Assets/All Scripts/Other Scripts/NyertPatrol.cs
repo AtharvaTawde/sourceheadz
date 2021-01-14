@@ -2,15 +2,14 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class NyertPatrol : MonoBehaviour
-{
+public class NyertPatrol : MonoBehaviour  {
+    // Put NT tag on anything that should not be detected by a Nyert!!!
     [SerializeField] float speed;
     [SerializeField] Transform groundDetection;
     [SerializeField] Transform blockDetection;
     [SerializeField] Transform airDetection;
     [SerializeField] float viewFinder;
-    [SerializeField] float forwardForce;
-    [SerializeField] float jumpForce = 250f;
+    [SerializeField] float jumpForce;
     Rigidbody2D rb;
     private bool movingLeft = true;
     
@@ -19,6 +18,7 @@ public class NyertPatrol : MonoBehaviour
         groundDetection = transform.GetChild(0);
         blockDetection = transform.GetChild(1);
         airDetection = transform.GetChild(2);
+        jumpForce = Mathf.Sqrt(Physics2D.gravity.magnitude * rb.gravityScale / 16) * rb.mass;
     }
 
     private void OnValidate() {
@@ -32,10 +32,8 @@ public class NyertPatrol : MonoBehaviour
 
         if (movingLeft) {
             viewFinder = .2f;
-            forwardForce = -2f;
         } else {
             viewFinder = -.2f;
-            forwardForce = 2f;
         }
         
         RaycastHit2D groundInfo = Physics2D.Raycast(groundDetection.position, Vector2.down, 2f);
@@ -43,52 +41,72 @@ public class NyertPatrol : MonoBehaviour
         RaycastHit2D airInfo = Physics2D.Raycast(airDetection.position, Vector2.left, viewFinder);
 
         # region String Builder
-        string air;
-        string block;
-        string ground;
 
-        if (airInfo.collider) {
-            air = airInfo.collider.tag;  
-        } else {
-            air = "Nothing";
+        bool NameCheck(RaycastHit2D hit2D, string name) {
+            if (hit2D.collider.gameObject.name.Contains(name)) {
+                return true;
+            } else {
+                return false;
+            }
+        }  
+
+        bool ColliderCheck(RaycastHit2D hit) {
+            return hit.collider && 
+                   hit.collider.tag != "NT" && 
+                   hit.collider.tag != "Water" && 
+                   !NameCheck(hit, "Gunflower") && 
+                   !NameCheck(hit, "Rock") && 
+                   !NameCheck(hit, "Health Pot") && 
+                   hit.collider.tag != "Item";
         }
 
-        if (blockInfo.collider) {
-            block = blockInfo.collider.tag;
-        } else {
-            block = "Nothing";
+        string Air() {
+            if (ColliderCheck(airInfo)) {
+                return airInfo.collider.tag;  
+            } else {
+                return "Nothing";
+            }
         }
 
-        if (groundInfo.collider) {
-            ground = groundInfo.collider.tag;
-        } else {
-            ground = "Nothing";
+        string Block() {
+            if (ColliderCheck(blockInfo)) {
+                return blockInfo.collider.tag;
+            } else {
+                return "Nothing";
+            }
         }
 
-        Debug.Log("Ground: " + ground );
+        string Ground() {
+            if (groundInfo.collider) {
+                return groundInfo.collider.tag;
+            } else {
+                return "Nothing";
+            }
+        }
+
         #endregion
 
-        if (ground == "Nothing" || block == "Player" || block == "Health Pot" || (block == "Enemy" && blockInfo.collider.gameObject != gameObject) || air == "Ground" ) {
+        if (Ground() == "Nothing" || Air() == "Block" || Block() == "Player" || Block() == "Health Pot" || (Block() == "Enemy" && blockInfo.collider.gameObject != gameObject) || Air() == "Ground") {
             FlipEnemy();
         }
 
-        if ((block == "Ground" || block == "Bounce Pad") && air == "Nothing") {
+        if ((Block() == "Ground" || Block() == "Bounce Pad" || Block() == "Block") && Air() == "Nothing") {
             Jump();
         }
     }
 
     void FlipEnemy() {
-            if (movingLeft == true) {
-                transform.eulerAngles = new Vector3(0, 0, 0);
-                movingLeft = false;
-            } else {
-                transform.eulerAngles = new Vector3(0, -180, 0);
-                movingLeft = true;
-            }
+        if (movingLeft == true) {
+            transform.eulerAngles = new Vector3(0, 0, 0);
+            movingLeft = false;
+        } else {
+            transform.eulerAngles = new Vector3(0, 180, 0);
+            movingLeft = true;
         }
+    }
 
     void Jump() {
-        rb.AddForce(new Vector2(forwardForce, jumpForce));
+        rb.AddForce(transform.up * jumpForce, ForceMode2D.Impulse);
     }
 
     private void OnDrawGizmos() {

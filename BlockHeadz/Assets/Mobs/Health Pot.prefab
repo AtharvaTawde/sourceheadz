@@ -14,9 +14,9 @@ GameObject:
   - component: {fileID: 5478341989418779229}
   - component: {fileID: 5478341989418779234}
   - component: {fileID: 5478341989418779235}
-  m_Layer: 11
+  m_Layer: 14
   m_Name: Health Pot
-  m_TagString: Health
+  m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -50,6 +50,7 @@ SpriteRenderer:
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 0
+  m_RayTraceProcedural: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:

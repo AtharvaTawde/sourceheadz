@@ -4,19 +4,23 @@
 TagManager:
   serializedVersion: 2
   tags:
-  - Enemy
-  - Health
-  - Key
-  - Limit
-  - Sorcerer
-  - Reset
-  - Gateway
+  - Block
   - Bartie
-  - Crafting Window
-  - Ground
-  - Bounce Pad
-  - Projectile
   - Item
+  - Bounce Pad
+  - Enemy
+  - Sorcerer
+  - NT
+  - Projectile
+  - Gateway
+  - Key
+  - Health
+  - Ground
+  - Crafting Window
+  - Water
+  - Boss
+  - Trading Window
+  - Trader
   layers:
   - Default
   - TransparentFX
@@ -26,43 +30,31 @@ TagManager:
   - UI
   - 
   - 
-  - Enemies
-  - Player
-  - Goblins
-  - Item
-  - Key
-  - Limit
-  - Gateway
-  - Gunners
-  - Fallens
-  - Sorcerer
   - Post Processing
-  - Not Touchable
-  - Revenants
-  - Archers
-  - Obstacle
+  - Enemies
+  - Trigger Blocks
+  - Plants
+  - Bosses
+  - 
+  - Items
+  - 
+  - 
+  - 
+  - 
+  - Obstacles
+  - 
+  - Explosives
   - Projectiles
-  - Gunflowers
+  - Player
+  - Inanimate Object
   - 
   - 
+  - Boundaries
+  - Fake Player
+  - Dropdowns
   - 
-  - 
-  - 
-  - 
-  - 
+  - Animals
   m_SortingLayers:
-  - name: Player
-    uniqueID: 1030792767
-    locked: 0
-  - name: Enemies
-    uniqueID: 1881432473
-    locked: 0
   - name: Default
     uniqueID: 0
-    locked: 0
-  - name: UI
-    uniqueID: 4053034605
-    locked: 0
-  - name: New Layer
-    uniqueID: 3304277993
     locked: 0

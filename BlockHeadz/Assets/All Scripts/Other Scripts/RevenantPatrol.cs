@@ -13,27 +13,29 @@ public class RevenantPatrol : MonoBehaviour {
     [SerializeField] float distanceAwayFromTarget;
     [SerializeField] float anotherDistance;
     [SerializeField] GameObject projectile;
+    [SerializeField] GameObject onFireGraphic;
+
+    public float burnTime = 0f;
 
     private int maxHealth = 1000;
+    private float burnCooldown = 0f;
     private int currentWayPoint = 0;
-    private float hitDistance = 10f;
     private float nextWayPointDistance = 1f; 
     private Vector3 direction;
     private RaycastHit2D lookingAt;
     private Path path;
     private Seeker seeker;
-    private bool reachedEndOfPath = false;
     private Rigidbody2D rb;
     private CameraShake cameraShake;
     private Animator animator;
     private GameObject touched;
     private GameObject healthEffect;
-    private static readonly float cooldown = .5f;
     private float hitCooldown;
+    private bool hurt;
 
     #region Drops
-    string[] dropNames = {"Diamond", "Diamond", "Diamond", "Diamond", "Diamond", "Diamond", "Diamond", "Diamond", "Diamond", "Diamond", "Corpuscle", "Corpuscle", "Clay Slab", "Clay Slab"};
-    int[] dropRates = {75, 50, 30, 20, 5, 5, 4, 3, 2, 1, 100, 100, 100, 100};
+    string[] dropNames = {"Diamond", "Diamond", "Corpuscle", "Gold Scrap", "Gold Scrap", "Gold Scrap", "Gold Scrap", "Gold Scrap"};
+    int[] dropRates = {10, 5, 75, 12, 20, 10, 5, 3};
     #endregion 
 
     private void Start() {
@@ -43,12 +45,17 @@ public class RevenantPatrol : MonoBehaviour {
         currentHealth = maxHealth;
         healthEffect = Resources.Load("Plus Particles") as GameObject;
         hitCooldown = 0f;
-
+        target = GameObject.Find("Player").transform;
         InvokeRepeating("UpdatePath", 0f, 0.25f);
     }
     
     private void Update() {
         CreatePath();
+        Burn();
+
+        if (hurt)
+            StartCoroutine(GetComponent<HitEffect>().HurtEffect());
+            hurt = false;
 
         anotherDistance = Vector3.Distance(target.position, transform.position);
         direction = firePoint.position - target.position;
@@ -65,10 +72,10 @@ public class RevenantPatrol : MonoBehaviour {
         }            
         #endregion
 
-        if (sight != "Ground" && InBetween(15, 25)) {
+        if (sight != "Ground" && sight != "Block" && !target.GetComponent<PlayerMovement>().isDead) {
             if (hitCooldown <= 0) {
                 Fire();
-                hitCooldown = cooldown;
+                hitCooldown = Random.Range(3, 5);
             } else if (hitCooldown > 0) {
                 hitCooldown -= Time.deltaTime;
             }
@@ -83,17 +90,14 @@ public class RevenantPatrol : MonoBehaviour {
             return;
         }    
 
-        if (currentWayPoint >= path.vectorPath.Count) {
-            reachedEndOfPath = true;
-            return;
-        } else {
-            reachedEndOfPath = false;
-        }
-
         Vector2 direction = ((Vector2)path.vectorPath[currentWayPoint] - rb.position).normalized;
         
-        if (InBetween(0, 25)) {
-            rb.AddForce(direction * speed);
+        if (distanceAwayFromTarget.IsWithin(0, 25)) {
+            if (!target.GetComponent<PlayerMovement>().isDead) {
+                rb.AddForce(direction * speed);
+            } else {
+                rb.AddForce(-direction * speed);
+            }
         }
 
         float distance = Vector2.Distance(rb.position, path.vectorPath[currentWayPoint]);
@@ -121,19 +125,11 @@ public class RevenantPatrol : MonoBehaviour {
         }
     }
 
-    private bool InBetween(int min, int max) {
-        if (distanceAwayFromTarget <= max && distanceAwayFromTarget >= min) {
-            return true;
-        } else {
-            return false;
-        }
-    }
-
     #endregion
 
     #region Combat Stuff
     public void TakeDamage(int damage) {
-        animator.SetTrigger("Hurt");
+        hurt = true;
         currentHealth -= damage;
         
         if (currentHealth <= 0) {
@@ -142,7 +138,7 @@ public class RevenantPatrol : MonoBehaviour {
     }
 
     void Die() {
-        PlayerPrefsHelper.IncrementInt("Revenants Killed");
+        HelperFunctions.IncrementInt("Revenants Killed");
         StartCoroutine(Blood()); 
         GenerateDrops();
         Destroy(gameObject);
@@ -166,8 +162,9 @@ public class RevenantPatrol : MonoBehaviour {
 
     void Drop(string name, int amount) {
         for (int i = 0; i < amount; i++) {
-            GameObject drop = Resources.Load(name) as GameObject;
-            Instantiate(drop, transform.position, transform.rotation);
+            GameObject drop = Resources.Load("Physical Items/" + name) as GameObject;
+            GameObject dropInstance = Instantiate(drop, transform.position, transform.rotation);
+            dropInstance.name = string.Format("{0}x{1}", name, amount.ToString());
         }
     }
 
@@ -177,17 +174,33 @@ public class RevenantPatrol : MonoBehaviour {
         int touchDamage = Random.Range(5, 7);
 
         if (touched.tag == "Player") {
-            touched.GetComponent<PlayerCombat>().TakeDamage(touchDamage);
+            if (!touched.GetComponent<PlayerMovement>().isDead) {
+                touched.GetComponent<PlayerCombat>().TakeDamage(touchDamage);
+            }
         } else if (touched.tag == "Enemy") {
-            if (Name("Nyert")) {
-                touched.GetComponent<Enemy>().TakeDamage(touchDamage);
-            } else if (Name("Goblin") || Name("Zombi")) {
-                touched.GetComponent<GoblinEnemy>().TakeDamage(touchDamage);
-            } else if (Name("Archer")) {
-                touched.GetComponent<ArcherCombat>().TakeDamage(touchDamage);
-            } else if (Name("Fallen")) {
-                touched.GetComponent<FallenCombat>().TakeDamage(touchDamage);
-            } 
+            string[] enemyNames = {"Nyert", "Goblin", "Zombi", "Archer", "Fallen"};
+            foreach (string n in enemyNames) {
+                if (Name(n)) {
+                    touched.GetComponent<TakeDamage>().ReceiveDamage(touchDamage);
+                } 
+            }
+        }
+    }
+
+    void Burn() {
+        if (burnTime > 0) {
+            onFireGraphic.SetActive(true);
+            burnTime -= Time.deltaTime;
+
+            if (burnCooldown <= 0) {
+                TakeDamage(10);                
+                burnCooldown = 0.5f;
+            } else {
+                burnCooldown -= Time.deltaTime;
+            }
+        } else {
+            onFireGraphic.SetActive(false);
+            burnTime = 0;
         }
     }
 

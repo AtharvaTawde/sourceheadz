@@ -6,9 +6,10 @@ public class Popper : MonoBehaviour {
     
     [SerializeField] Transform detonationPoint;
     [SerializeField] AudioClip explodeSound;
+    [SerializeField] GameObject explosion;
     
-    private float power = 1500f;
-    private float radius = 2.5f;
+    private float power = 1000f;
+    private float radius = 4f;
     private float detonateTime = 3f;
     private float randomPitch;
     private bool detonate;
@@ -38,44 +39,39 @@ public class Popper : MonoBehaviour {
 
     private IEnumerator Explode() {
         audioSource.PlayOneShot(explodeSound, randomPitch);
+        GameObject expInstance = Instantiate(explosion, transform.position, transform.rotation);
+        Destroy(expInstance, 0.8f);
         GetComponent<SpriteRenderer>().enabled = false;
         Collider2D[] colliders = Physics2D.OverlapCircleAll(new Vector2(detonationPoint.position.x, detonationPoint.position.y), radius);
+        
         foreach (Collider2D hit in colliders) {
             detonate = true;
             Rigidbody2D rb = hit.GetComponent<Rigidbody2D>();
             PlayerCombat player = hit.GetComponent<PlayerCombat>();
             TakeDamage creature = hit.GetComponent<TakeDamage>();
+            Vector3 direction = transform.position - hit.transform.position;
+            float distance = Vector3.Distance(transform.position, hit.transform.position);
 
-            if (rb != null && !hit.gameObject.name.Contains("Popper")) {
-                rb.AddExplosionForce(power, detonationPoint.position, radius, 50f);
+            if (rb != null && !hit.gameObject.name.Contains("Popper") && !hit.gameObject.name.Contains("Stratum")) {
+                rb.AddForce(-direction * rb.mass * Mathf.Sqrt(Physics2D.gravity.magnitude) * radius / distance, ForceMode2D.Impulse);
             }
-        
+
             if (player != null) {
-                player.TakeDamage(50);
+                player.TakeDamage(Mathf.RoundToInt(250 * radius / distance));
             } else if (creature != null) {
-                creature.ReceiveDamage(50);
+                creature.ReceiveDamage(Mathf.RoundToInt(250 * radius / distance));
             }
         }
+        
         detonate = false;
         yield return new WaitForSeconds(explodeSound.length);
         Destroy(gameObject);
     }
-
+ 
 }
 
 public static class Rigidbody2DExtension {
  
-    //public static void AddExplosionForce(this Rigidbody2D body, float explosionForce, Vector3 explosionPosition, float explosionRadius, float upliftModifier) {
-    //    var dir = (body.transform.position - explosionPosition);
-    //    float wearoff = 1 - (dir.magnitude / explosionRadius);
-    //    Vector3 baseForce = dir.normalized * (wearoff <= 0f ? 0f : explosionForce) * wearoff;
-    //    body.AddForce(baseForce);
- 
-    //    float upliftWearoff = 1 - upliftModifier / explosionRadius;
-    //    Vector3 upliftForce = Vector2.up * explosionForce * upliftWearoff;
-    //    body.AddForce(upliftForce);
-    //}
-
     public static void AddExplosionForce(this Rigidbody2D rb, float explosionForce, Vector2 explosionPosition, float explosionRadius, float upwardsModifier, ForceMode2D mode = ForceMode2D.Impulse) {
         var explosionDir = rb.position - explosionPosition;
         var explosionDistance = explosionDir.magnitude;

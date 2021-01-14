@@ -16,20 +16,18 @@ public class Item : ScriptableObject {
     public string ItemDescription; 
     
     private void Start() {
-        string path = AssetDatabase.GetAssetPath(this);
-        id = AssetDatabase.AssetPathToGUID(path);
         CurrentStacks = MaximumStacks;
     }
     
     private void OnValidate() {
-        string path = AssetDatabase.GetAssetPath(this);
-        id = AssetDatabase.AssetPathToGUID(path);
+        //string path = AssetDatabase.GetAssetPath(this);
+        //id = AssetDatabase.AssetPathToGUID(path);
         CurrentStacks = MaximumStacks;
     }
 
     public virtual Item GetCopy() {return this;}    
 
     public virtual void Destroy() {}              
-
+    
 }
 

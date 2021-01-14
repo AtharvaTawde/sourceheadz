@@ -52,6 +52,5 @@
         "ProjectSettings/":true,
         "temp/":true,
         "Temp/":true
-    },
-    "python.pythonPath": "d:\\Programs\\Python37\\python.exe"
+    }
 }

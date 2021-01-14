@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 3264155902247385595}
   - component: {fileID: 3264155902247385594}
   - component: {fileID: -5559546199887981820}
-  - component: {fileID: 5926557211176294076}
+  - component: {fileID: 3763823565586481247}
   m_Layer: 0
   m_Name: GunflowerPlant
   m_TagString: Untagged
@@ -27,7 +27,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3264155902247385573}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -6.61, y: -1, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -73,7 +73,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: 32b0d0527deef73488af1999fe41074d, type: 3}
+  m_Sprite: {fileID: 21300000, guid: e9a64e97926327b4a82906de38f2aa9e, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -97,15 +97,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   stages:
-  - {fileID: 21300000, guid: 32b0d0527deef73488af1999fe41074d, type: 3}
-  - {fileID: 21300000, guid: 078c7b7c7d5517c418355465dd8d5379, type: 3}
-  - {fileID: 21300000, guid: 301cb3eb11288b047bda88085be2b284, type: 3}
-  - {fileID: 21300000, guid: ca80c82177a8fd04f8819d2911ef9a8c, type: 3}
-  gunflower: {fileID: 5716066465430825590, guid: 560d17424e7648244a50e8c5d4a3b1cd,
-    type: 3}
+  - {fileID: 21300000, guid: e9a64e97926327b4a82906de38f2aa9e, type: 3}
+  - {fileID: 21300000, guid: 70d30db6580814149af54f5d532f2945, type: 3}
+  - {fileID: 21300000, guid: 0915dac803abcd54f9b3878fefb7e6ab, type: 3}
+  - {fileID: 21300000, guid: 8982eb8ded06a3540b62778c11cfd7a4, type: 3}
+  - {fileID: 21300000, guid: dfe0dd1fd7924664695dd4f4301484ab, type: 3}
+  gunflower: {fileID: 1996192169317278996, guid: 560d17424e7648244a50e8c5d4a3b1cd, type: 3}
   currentStage: 0
   timeToGrow: 0
---- !u!61 &5926557211176294076
+--- !u!61 &3763823565586481247
 BoxCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -118,7 +118,7 @@ BoxCollider2D:
   m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0, y: -0.9389913}
+  m_Offset: {x: 0, y: 0}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
@@ -129,5 +129,5 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 2, y: 0.12201738}
+  m_Size: {x: 1, y: 2}
   m_EdgeRadius: 0

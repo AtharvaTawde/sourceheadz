@@ -9,7 +9,6 @@ using UnityEngine.EventSystems;
 
 public class LevelLoader : MonoBehaviour {
 
-
     #region Public Variables
     public Animator transition;
     public Animator playermove;
@@ -17,8 +16,8 @@ public class LevelLoader : MonoBehaviour {
     public GameObject MainMenu;
     public GameObject Instrux;
     public Slider qualitySlider;
-    public GameObject PostProcessing;
-    public TextMeshProUGUI storyModeText;
+    public GameObject PostProcessing;   
+    //public TextMeshProUGUI storyModeText;
     #endregion
     
     #region Private Variables
@@ -26,47 +25,18 @@ public class LevelLoader : MonoBehaviour {
     private string sceneName;
     private bool playerDead;
     private bool thruGate;
-    
-    GameObject PauseMenu;
     #endregion
 
-    void Start() {
+    private void Start() {
         PostProcessing = GameObject.Find("Post Processing Stack");
         
         if (qualitySlider != null)
             qualitySlider.value = PlayerPrefs.GetFloat("Quality");
         
-        if (PlayerPrefs.GetString("Story") == "")
-            PlayerPrefs.SetString("Story", "True");
-
         PostProcessing.GetComponent<PostProcessVolume>().weight = PlayerPrefs.GetFloat("Quality");
         scene = SceneManager.GetActiveScene().buildIndex;
         sceneName = SceneManager.GetActiveScene().name;
-    } 
-
-    public void Play() {
-        if (PlayerPrefs.GetString("Story") == "True") {
-            LoadArea("Story 1");
-        } else {
-            LoadArea("Stage 1");
-        }
-    }
-
-    public void HTP() {
-        LoadInstrux();
-    }
-
-    public void Quit() {
-        Time.timeScale = 1f;
-        Application.Quit();
-    }
-
-    public void Back() {
-        SwitchActive();
-    }
-
-    public void LoadArea(string name) {
-        StartCoroutine(LoadLevelByName(name));
+        ButtonSetup();
     } 
 
     private void ButtonSetup() {
@@ -84,136 +54,89 @@ public class LevelLoader : MonoBehaviour {
     }
 
     private void Update() { 
-
-        ButtonSetup();
-        PostProcessing.GetComponent<PostProcessVolume>().weight = PlayerPrefs.GetFloat("Quality");
+        if (sceneName == "Selector") {
+            PostProcessing.GetComponent<PostProcessVolume>().weight = PlayerPrefs.GetFloat("Quality");
+        }
         
         if (qualitySlider != null) {
             PlayerPrefs.SetFloat("Quality", qualitySlider.value);
         }
-
-        if (PlayerPrefs.GetString("Story") == "True" && storyModeText != null) {
-            storyModeText.text = "Story Mode is ON\nPress M to toggle.";
-        } else if (PlayerPrefs.GetString("Story") != "True" && storyModeText != null) {
-            storyModeText.text = "Story Mode is OFF\nPress M to toggle.";
-        }
-
-        if (Input.GetKeyDown(KeyCode.M) && PlayerPrefs.GetString("Story") == "True") {
-            PlayerPrefs.SetString("Story", "False");
-        } else if (Input.GetKeyDown(KeyCode.M) && PlayerPrefs.GetString("Story") != "True") {
-            PlayerPrefs.SetString("Story", "True");
-        }
-
-        if (scene == 1 || scene == 3 || scene == 5 || scene == 8) {
-            GameObject player = GameObject.Find("Player");
-            
-            if (player == null) {
-                playerDead = true;
-            } else {
-                playerDead = false;
-
-                PlayerCombat p = player.GetComponent<PlayerCombat>();
-                thruGate = p.thruGate;
-
-                if (thruGate) {
-                    if (sceneName == "Stage 1") {
-                        LoadArea("Stage 2");
-                    } else if (sceneName == "Stage 2") {
-                        LoadArea("Stage 3");
-                    } else if (sceneName == "Stage 3") {
-                        if (PlayerPrefs.GetString("Story") == "True") {
-                            LoadArea("Story 2");
-                        } else {
-                            LoadArea("FinalStage");
-                        }
-                    } else if (sceneName == "FinalStage") {
-                        if (PlayerPrefs.GetString("Story") == "True") {
-                            LoadArea("Story 3");
-                        } else {
-                            LoadArea("GameComplete");
-                        }
-                    }
-                }
-            }
-
-            if (playerDead) {
-                GameOver();
-            }
-            
-        } else if (sceneName == "Game Over" || sceneName == "GameComplete") {
-            if (Input.GetMouseButtonDown(0) || Input.GetKey(KeyCode.Space)) {
-                LoadMainMenu();
-            }
-        }
     }
+
+    #region Toggle Story Mode
+    //void ToggleStoryMode() {
+    //    if (PlayerPrefs.GetString("Story") == "True" && storyModeText != null) {
+    //        storyModeText.text = "Story Mode is ON\nPress M to toggle.";
+    //    } else if (PlayerPrefs.GetString("Story") != "True" && storyModeText != null) {
+    //        storyModeText.text = "Story Mode is OFF\nPress M to toggle.";
+    //    }
+    //    if (Input.GetKeyDown(KeyCode.M) && PlayerPrefs.GetString("Story") == "True") {
+    //        PlayerPrefs.SetString("Story", "False");
+    //    } else if (Input.GetKeyDown(KeyCode.M) && PlayerPrefs.GetString("Story") != "True") {
+    //        PlayerPrefs.SetString("Story", "True");
+    //    }
+    //}
+    #endregion
     
-    public void LoadMainMenu() {
-        Time.timeScale = 1f;
-        LoadArea("Selector");
-    }
-
-    public void LoadStage1() {
+    // external calls (such as buttons)
+    public void Play() {
         LoadArea("Stage 1");
     }
 
-    public void GameOver() {
-        LoadArea("Game Over");
+    public void HTP() {
+        LoadInstrux();
     }
 
-    public void LoadStage2() {
-        LoadArea("Stage 2");
+    public void Quit() {
+        Time.timeScale = 1f;
+        Application.Quit();
     }
 
-    public void LoadStage3() {
-        LoadArea("Stage 3");
+    public void Back() {
+        SwitchActive();
     }
 
-    public void LoadStory1() {
-        LoadArea("Story 1");
+    public void LoadArea(string name) {
+        Time.timeScale = 1f;
+        StartCoroutine(LoadLevelByName(name));
+    } 
+
+    public void LoadMainMenu() {
+        LoadArea("Selector");
     }
 
-    public void LoadStory2() {
-        LoadArea("Story 2");
-    }
-
-    public void LoadFinalStage() {
-        LoadArea("FinalStage");
-    }
-
-    public void LoadFinalStory() {
-        LoadArea("Story 3");
+    public void LoadWorld() {
+        LoadArea("Stage 1");
     }
 
     public void LoadStatistics() {
         LoadArea("Statistics");
     }
 
-    public void LoadInstrux() {
-        MainMenu.SetActive(false);
-        if (playermove != null)    
-            playermove.SetBool("Move", true);
-        Instrux.SetActive(true);
+    public void LoadShop() {
+        LoadArea("Shop");
     }
 
     public void LoadSettings() {
         LoadArea("Settings");
     }
 
+    public void LoadInstrux() {
+        MainMenu.SetActive(false);
+        if (playermove != null) {
+            playermove.SetBool("Move", true);
+        }  
+        Instrux.SetActive(true);
+    }
+
     public void SwitchActive() {
         MainMenu.SetActive(true);   
-        if (playermove != null)
+        if (playermove != null) {
             playermove.SetBool("Move", false);
+        }
         Instrux.SetActive(false);
     }
 
-    public void GameComplete() {
-        LoadArea("GameComplete");
-    }
-
-    public void LoadShop() {
-        LoadArea("Shop");
-    }
-    
     IEnumerator LoadLevel(int levelIndex) {
         transition.SetTrigger("Start");
         yield return new WaitForSeconds(transitionTime);
@@ -226,7 +149,3 @@ public class LevelLoader : MonoBehaviour {
         SceneManager.LoadScene(name);
     }
 }
-
-
-
-//SceneManager.GetActiveScene().buildIndex + 1

@@ -15,9 +15,9 @@ public class Shop : MonoBehaviour {
                             "Fry eggs on it. Or anything. I don't really care.", 
                             "Stop right there.", 
                             "Flex with the ultimate Banana. Serves as a healthy snack afterwards.", 
-                            "You won. You deserve this.", 
+                            "Victory written with blood.", 
                             "Killer of all.", 
-                            "Ah. I see. Now you are getting interested in magic...", 
+                            "Quite impressive...", 
                             "Did you have a great time at Bartie's?"};
     GameObject selectBar, selectedGameObject;
     Vector3 currentPosition, selectedPosition, targetPosition;

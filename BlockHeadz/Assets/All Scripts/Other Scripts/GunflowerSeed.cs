@@ -28,7 +28,6 @@ public class GunflowerSeed : MonoBehaviour {
             Instantiate(gunflower, transform.position, transform.rotation);
             Destroy(gameObject);
         }
-
     }
 
 }

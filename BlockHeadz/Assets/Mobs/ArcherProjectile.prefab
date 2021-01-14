@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 8586445886033511239}
   - component: {fileID: -9046265376901146963}
   - component: {fileID: -5933099117965574884}
-  m_Layer: 23
+  m_Layer: 22
   m_Name: ArcherProjectile
   m_TagString: Projectile
   m_Icon: {fileID: 0}
@@ -95,7 +95,7 @@ BoxCollider2D:
   m_Enabled: 1
   m_Density: 1
   m_Material: {fileID: 0}
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}

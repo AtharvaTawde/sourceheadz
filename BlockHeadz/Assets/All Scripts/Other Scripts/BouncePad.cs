@@ -10,8 +10,13 @@ public class BouncePad : MonoBehaviour {
         if (other.gameObject.GetComponent<Rigidbody2D>() != null) {
             Rigidbody2D rb = other.gameObject.GetComponent<Rigidbody2D>();
 
-            Vector3 surfaceNormal = other.GetContact(0).normal * -1f;
-            rb.AddForce(surfaceNormal * power);
+            if (other.gameObject.GetComponent<PlayerMovement>() != null && !other.gameObject.GetComponent<PlayerMovement>().isDead) {
+                Vector3 surfaceNormal = other.GetContact(0).normal * -1f;
+                rb.AddForce(surfaceNormal * power);
+            } else if (other.gameObject.GetComponent<PlayerMovement>() == null) {
+                Vector3 surfaceNormal = other.GetContact(0).normal * -1f;
+                rb.AddForce(surfaceNormal * power);
+            }
         } 
     }
 
