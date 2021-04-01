@@ -1,0 +1,60 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!78 &1
+TagManager:
+  serializedVersion: 2
+  tags:
+  - Block
+  - Bartie
+  - Item
+  - Bounce Pad
+  - Enemy
+  - Sorcerer
+  - NT
+  - Projectile
+  - Gateway
+  - Key
+  - Health
+  - Ground
+  - Crafting Window
+  - Water
+  - Boss
+  - Trading Window
+  - Trader
+  layers:
+  - Default
+  - TransparentFX
+  - Ignore Raycast
+  - 
+  - Water
+  - UI
+  - 
+  - 
+  - Post Processing
+  - Enemies
+  - Trigger Blocks
+  - Plants
+  - Bosses
+  - 
+  - Items
+  - 
+  - 
+  - 
+  - 
+  - Obstacles
+  - 
+  - Explosives
+  - Projectiles
+  - Player
+  - Inanimate Object
+  - 
+  - 
+  - Boundaries
+  - Fake Player
+  - Dropdowns
+  - 
+  - Animals
+  m_SortingLayers:
+  - name: Default
+    uniqueID: 0
+    locked: 0
